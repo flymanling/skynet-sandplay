@@ -122,7 +122,7 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
         </tx:attributes>  
     </tx:advice>  
     <aop:config>  
-        <aop:pointcut id="transactionPointcut" expression="execution(* com.skynet.standard.service..*Impl.*(..))" />  
+        <aop:pointcut id="transactionPointcut" expression="execution(* com.skynet.sandplay.service..*Impl.*(..))" />  
         <aop:advisor pointcut-ref="transactionPointcut" advice-ref="transactionAdvice" />  
     </aop:config>  
   

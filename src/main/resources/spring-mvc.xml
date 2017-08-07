@@ -9,7 +9,7 @@
       http://www.springframework.org/schema/mvc    
       http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">  
     <!-- 注解扫描包 -->  
-    <context:component-scan base-package="com.skynet.standard.controller" />  
+    <context:component-scan base-package="com.skynet.sandplay.controller" />  
     <!-- 开启mvc注解 -->  
     <mvc:annotation-driven />  
   

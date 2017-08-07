@@ -7406,4 +7406,40 @@ Caused by: java.net.ConnectException: Connection refused
 		{ID:1875977008, ConnectTime:"2017-08-07 16:52:56", UseCount:2, LastActiveTime:"2017-08-07 16:52:56"}
 	]
 }] of Hibernate SessionFactory for HibernateTransactionManager
+ [INFO][2017-08-07 17:37:22,721][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@c5b644b: startup date [Mon Aug 07 17:37:22 CST 2017]; root of context hierarchy
+ [INFO][2017-08-07 17:37:22,766][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring.xml]
+ [INFO][2017-08-07 17:37:22,920][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-hibernate.xml]
+ [INFO][2017-08-07 17:37:23,069][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [config.properties]
+ [INFO][2017-08-07 17:37:23,111][org.springframework.beans.factory.support.DefaultListableBeanFactory]Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@54d9bb1: defining beans [org.springframework.beans.factory.config.PropertyPlaceholderConfigurer#0,baseDao,baseService,org.springframework.context.annotation.internalConfigurationAnnotationProcessor,org.springframework.context.annotation.internalAutowiredAnnotationProcessor,org.springframework.context.annotation.internalRequiredAnnotationProcessor,org.springframework.context.annotation.internalCommonAnnotationProcessor,org.springframework.context.annotation.internalPersistenceAnnotationProcessor,dataSource,sessionFactory,transactionManager,transactionAdvice,org.springframework.aop.config.internalAutoProxyCreator,transactionPointcut,org.springframework.aop.support.DefaultBeanFactoryPointcutAdvisor#0,org.springframework.context.annotation.ConfigurationClassPostProcessor.importAwareProcessor]; root of factory hierarchy
+ [ERROR][2017-08-07 17:37:23,197][com.alibaba.druid.pool.DruidAbstractDataSource]maxIdle is deprecated
+ [INFO][2017-08-07 17:37:23,258][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+ [INFO][2017-08-07 17:37:23,514][org.hibernate.annotations.common.Version]HCANN000001: Hibernate Commons Annotations {4.0.2.Final}
+ [INFO][2017-08-07 17:37:23,517][org.hibernate.Version]HHH000412: Hibernate Core {4.2.5.Final}
+ [INFO][2017-08-07 17:37:23,519][org.hibernate.cfg.Environment]HHH000206: hibernate.properties not found
+ [INFO][2017-08-07 17:37:23,520][org.hibernate.cfg.Environment]HHH000021: Bytecode provider name : javassist
+ [INFO][2017-08-07 17:37:23,735][org.hibernate.dialect.Dialect]HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+ [INFO][2017-08-07 17:37:23,740][org.hibernate.engine.jdbc.internal.LobCreatorBuilder]HHH000423: Disabling contextual LOB creation as JDBC driver reported JDBC version [3] less than 4
+ [INFO][2017-08-07 17:37:23,820][org.hibernate.engine.transaction.internal.TransactionFactoryInitiator]HHH000399: Using default transaction strategy (direct JDBC transactions)
+ [INFO][2017-08-07 17:37:23,824][org.hibernate.hql.internal.ast.ASTQueryTranslatorFactory]HHH000397: Using ASTQueryTranslatorFactory
+ [WARN][2017-08-07 17:37:23,851][org.hibernate.id.UUIDHexGenerator]HHH000409: Using org.hibernate.id.UUIDHexGenerator which does not generate IETF RFC 4122 compliant UUID values; consider using org.hibernate.id.UUIDGenerator instead
+ [INFO][2017-08-07 17:37:24,019][org.hibernate.tool.hbm2ddl.SchemaUpdate]HHH000228: Running hbm2ddl schema update
+ [INFO][2017-08-07 17:37:24,019][org.hibernate.tool.hbm2ddl.SchemaUpdate]HHH000102: Fetching database metadata
+ [INFO][2017-08-07 17:37:24,021][org.hibernate.tool.hbm2ddl.SchemaUpdate]HHH000396: Updating schema
+ [INFO][2017-08-07 17:37:24,034][org.hibernate.tool.hbm2ddl.TableMetadata]HHH000261: Table found: test.user
+ [INFO][2017-08-07 17:37:24,034][org.hibernate.tool.hbm2ddl.TableMetadata]HHH000037: Columns: [id, modifydate, name, age, createdate]
+ [INFO][2017-08-07 17:37:24,034][org.hibernate.tool.hbm2ddl.TableMetadata]HHH000108: Foreign keys: []
+ [INFO][2017-08-07 17:37:24,034][org.hibernate.tool.hbm2ddl.TableMetadata]HHH000126: Indexes: [primary]
+ [INFO][2017-08-07 17:37:24,035][org.hibernate.tool.hbm2ddl.SchemaUpdate]HHH000232: Schema update complete
+ [INFO][2017-08-07 17:37:24,088][org.springframework.orm.hibernate4.HibernateTransactionManager]Using DataSource [{
+	CreateTime:"2017-08-07 17:37:23",
+	ActiveCount:0,
+	PoolingCount:1,
+	CreateCount:1,
+	DestroyCount:0,
+	CloseCount:2,
+	ConnectCount:2,
+	Connections:[
+		{ID:1203266067, ConnectTime:"2017-08-07 17:37:23", UseCount:2, LastActiveTime:"2017-08-07 17:37:24"}
+	]
+}] of Hibernate SessionFactory for HibernateTransactionManager
  
