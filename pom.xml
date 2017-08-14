@@ -199,7 +199,16 @@
 	    	<artifactId>commons-dbcp</artifactId>  
 	    	<version>1.4</version>  
 		</dependency>  
-	    
+	    <dependency>
+			<groupId>org.mortbay</groupId>
+			<artifactId>jetty</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mortbay</groupId>
+			<artifactId>jetty-util</artifactId>
+			<version>1.0</version>
+		</dependency>
 	    <!-- 
 	    <dependency>
     		<groupId>org.apache.poi</groupId>
