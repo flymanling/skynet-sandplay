@@ -24,12 +24,11 @@ public class ServerStartup {
     public void startup() {
         server = new Server();
         
-        int wapPort = 81;
+        int wapPort = 99;
         Connector connector = new SelectChannelConnector();
         connector.setPort(wapPort);
         server.setConnectors(new Connector[]{connector});
         connector.setHost("0.0.0.0");
-
         WebAppContext context = new WebAppContext("src/main/webapp", "/");
         
         server.addHandler(context);
