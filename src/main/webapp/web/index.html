@@ -10,7 +10,7 @@
 		var n = 2;
 		function checkRound(r) {
 			if(r>n) {
-				alert("111");
+				alert("第三轮尚未解锁！");
 				return;
 			} else {
 				$.post("/IndexServlet",
@@ -29,22 +29,49 @@
 
 <ul id="myTab" class="nav nav-tabs">
 	<li class="active">
-		<a href="#home" data-toggle="tab">
-			 沙盘
-		</a>
+		<a href="#home" data-toggle="tab">沙盘游戏</a>
 	</li>
 	<li><a href="#r-one" data-toggle="tab" onclick="checkRound(1)">第一轮</a></li>
 	<li><a href="#r-one" data-toggle="tab" onclick="checkRound(2)">第二轮</a></li>
 	<li><a href="#r-one" data-toggle="tab" onclick="checkRound(3)">第三轮</a></li>
+	<li><a href="#r-one" data-toggle="tab" onclick="checkRound(3)">第四轮</a></li>
+	<li><a href="#r-one" data-toggle="tab" onclick="checkRound(3)">第五轮</a></li>
+	<li><a href="#r-one" data-toggle="tab" onclick="checkRound(3)">第六轮</a></li>
+	<li><a href="#r-one" data-toggle="tab" onclick="checkRound(3)">第七轮</a></li>
+	<li><a href="#r-one" data-toggle="tab" onclick="checkRound(3)">第八轮</a></li>
+	<li><a href="#r-one" data-toggle="tab" onclick="checkRound(3)">第九轮</a></li>
+	<li><a href="#r-one" data-toggle="tab" onclick="checkRound(3)">第十轮</a></li>
 	
 </ul>
 <div id="myTabContent" class="tab-content">
 	<div class="tab-pane fade in active" id="home">
-		<p>沙盘</p>
+		<p>开始游戏前</p>
+		<p>请输入你的名字</p>
+		<input type="text">
 	</div>
 	<div class="tab-pane fade" id="r-one">
 		<p>第<scan id="r">ddd</scan>轮</p>
-		
+		<form role="form">
+		<table>
+			<tr>
+				<td>保险</td>
+				<td>
+					<input type="text">
+				</td>
+			</tr>
+			<tr>
+				<td>ETF</td>
+				<td>
+					<input type="text">
+				</td>
+			</tr>
+			<tr>
+			<td>
+				<input type="submit" value="提交">
+			</td>
+			</tr>
+		</table>
+		</form>
 	</div>
 	
 	

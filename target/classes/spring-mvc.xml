@@ -14,16 +14,11 @@
       
       
     <!-- 注解扫描包 -->  
-    <context:component-scan base-package="com.skynet.sandplay">
-    	<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />  
-  <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" /> 
-<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository" />  
-    </context:component-scan>  
+    <context:component-scan base-package="com.skynet.sandplay.controller" />
     <!-- 开启mvc注解 -->  
     <mvc:annotation-driven />  
     
     <mvc:default-servlet-handler />
-      <tx:annotation-driven transaction-manager="transactionManager"/>
   
     <bean id="viewResolver"  
         class="org.springframework.web.servlet.view.InternalResourceViewResolver">  

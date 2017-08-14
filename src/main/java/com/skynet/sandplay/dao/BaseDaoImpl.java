@@ -19,7 +19,9 @@ public class BaseDaoImpl <T, PK extends Serializable> implements IBaseDao<T, PK>
   public BaseDaoImpl() {  
       this.entityClass = null;  
       Class<?> c = getClass();  
-      Type type = c.getGenericSuperclass();  
+      System.out.println("class : " + c);
+      Type type = c.getGenericSuperclass();
+      System.out.println("type : " + type);
       if (type instanceof ParameterizedType) {  
           Type[] parameterizedType = ((ParameterizedType) type).getActualTypeArguments();  
           this.entityClass = (Class<T>) parameterizedType[0];  
@@ -36,12 +38,17 @@ public class BaseDaoImpl <T, PK extends Serializable> implements IBaseDao<T, PK>
   }  
 
   public T get(PK id) {  
-//      Assert.assertNotNull( "id is required", id);  
-      return (T) getSession().get(entityClass, id);  
+//      Assert.assertNotNull( "id is required", id); 
+	  Session session = getSession();
+	  System.out.println("session: " + session);
+	  System.out.println("id: " + id);
+	  System.out.println(entityClass);
+      return (T) session.get(entityClass, id);  
   }  
 
   public PK save(T entity) {  
 //      Assert.assertNotNull("entity is required", entity);  
+	  System.out.println(entityClass);
       return (PK) getSession().save(entity);  
   }  
 

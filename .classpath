@@ -25,5 +25,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="src/main/webapp/lib/jetty-1.0.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/lib/jetty-util-1.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

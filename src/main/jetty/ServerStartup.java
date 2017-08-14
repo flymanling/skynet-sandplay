@@ -4,6 +4,7 @@ import org.mortbay.jetty.handler.RequestLogHandler;
 import org.mortbay.jetty.nio.SelectChannelConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
 
+
 /**
  * 启动jetty
  * 
@@ -24,7 +25,7 @@ public class ServerStartup {
     public void startup() {
         server = new Server();
         
-        int wapPort = 99;
+        int wapPort = 3333;
         Connector connector = new SelectChannelConnector();
         connector.setPort(wapPort);
         server.setConnectors(new Connector[]{connector});
