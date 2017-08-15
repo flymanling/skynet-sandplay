@@ -32,11 +32,10 @@ public class IndexServlet {
 	}
 	
 	@RequestMapping
-	@Transactional
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String round = req.getParameter("round");
 		System.out.println("round:"+round);
-		User user = baseService.get("402881e65de12882015de1288d690000");
+		User user = baseService.get("40284cd85dbbc53e015dbbc540250000");
 		resp.getWriter().write(gson.toJson(user));;
 	}
 
