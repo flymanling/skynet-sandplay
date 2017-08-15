@@ -8,10 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.google.gson.Gson;
+import com.skynet.sandplay.form.BaseMsg;
 import com.skynet.sandplay.model.User;
 import com.skynet.sandplay.service.IBaseService;
 
@@ -19,8 +19,8 @@ import com.skynet.sandplay.service.IBaseService;
  * Servlet implementation class IndexServlet
  */
 @Controller
-@RequestMapping("/IndexServlet")
-public class IndexServlet {
+@RequestMapping("/BaseAction")
+public class BaseAction {
 	private static final long serialVersionUID = 1L;
 	Gson gson = new Gson();
 	
@@ -33,10 +33,10 @@ public class IndexServlet {
 	
 	@RequestMapping
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String round = req.getParameter("round");
-		System.out.println("round:"+round);
-		User user = baseService.get("40284cd85dbbc53e015dbbc540250000");
-		resp.getWriter().write(gson.toJson(user));;
+		String data = req.getParameter("data");
+		if(data != null) {
+			BaseMsg msg = gson.fromJson(data, BaseMsg.class);
+		}
 	}
 
 }
