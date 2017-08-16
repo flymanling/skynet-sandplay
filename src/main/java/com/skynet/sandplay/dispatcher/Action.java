@@ -4,5 +4,5 @@ import com.skynet.sandplay.form.BaseMsg;
 
 public interface Action {
 
-	public String execute(ActionCtroller actionCtroller, BaseMsg msg) throws Exception;
+	public String execute(BaseMsg msg) throws Exception;
 }

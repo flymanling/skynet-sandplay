@@ -9,6 +9,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd
     <!-- 引入属性文件 -->  
     <context:property-placeholder location="classpath:config.properties" />  
   
+  	<bean class="com.skynet.sandplay.dispatcher.SpringContext"  />
     <!-- 自动扫描dao和service包(自动注入) -->  
     <context:component-scan base-package="com.skynet.sandplay.dao, com.skynet.sandplay.service, com.skynet.sandplay.dispatcher" />
   

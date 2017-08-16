@@ -7,6 +7,8 @@ public class RoundPlay extends BaseEntity{
 
 	private static final long serialVersionUID = 1361486812248783663L;
 
+	public static int currentRound = 0;
+	
 	private String name;
 	
 	private String setId;
