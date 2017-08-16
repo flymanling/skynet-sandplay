@@ -13,8 +13,15 @@
 				alert("第三轮尚未解锁！");
 				return;
 			} else {
-				$.post("/IndexServlet",
-						{round:r},
+				var data = {
+						serviceId:1,
+						actionId:1,
+						content:{
+							round:r	
+						}
+					};
+				$.post("/BaseAction",
+						{data:JSON.stringify(data)},
 						function(rsp){
 				       		console.log(rsp);
 				    },"json");

@@ -9,25 +9,25 @@ public class Round extends BaseEntity{
 
 	private String name;
 	
-	private Integer asset;
+	private int asset;
 	
-	private Integer house;
+	private int house;
 	
-	private Integer houseChange;
+	private int houseChange;
 	
-	private Integer etf;
+	private int etf;
 	
-	private Integer eftChange;
+	private int eftChange;
 	
-	private Integer hk;
+	private int hk;
 	
-	private Integer hkChange;
+	private int hkChange;
 	
-	private Integer bank;
+	private int bank;
 	
-	private Integer bankChange;
+	private int bankChange;
 	
-	private Integer status;
+	private int status;
 
 	public String getName() {
 		return name;
@@ -37,83 +37,83 @@ public class Round extends BaseEntity{
 		this.name = name;
 	}
 
-	public Integer getAsset() {
+	public int getAsset() {
 		return asset;
 	}
 
-	public void setAsset(Integer asset) {
+	public void setAsset(int asset) {
 		this.asset = asset;
 	}
 
-	public Integer getHouse() {
+	public int getHouse() {
 		return house;
 	}
 
-	public void setHouse(Integer house) {
+	public void setHouse(int house) {
 		this.house = house;
 	}
 
-	public Integer getHouseChange() {
+	public int getHouseChange() {
 		return houseChange;
 	}
 
-	public void setHouseChange(Integer houseChange) {
+	public void setHouseChange(int houseChange) {
 		this.houseChange = houseChange;
 	}
 
-	public Integer getEtf() {
+	public int getEtf() {
 		return etf;
 	}
 
-	public void setEtf(Integer etf) {
+	public void setEtf(int etf) {
 		this.etf = etf;
 	}
 
-	public Integer getEftChange() {
+	public int getEftChange() {
 		return eftChange;
 	}
 
-	public void setEftChange(Integer eftChange) {
+	public void setEftChange(int eftChange) {
 		this.eftChange = eftChange;
 	}
 
-	public Integer getHk() {
+	public int getHk() {
 		return hk;
 	}
 
-	public void setHk(Integer hk) {
+	public void setHk(int hk) {
 		this.hk = hk;
 	}
 
-	public Integer getHkChange() {
+	public int getHkChange() {
 		return hkChange;
 	}
 
-	public void setHkChange(Integer hkChange) {
+	public void setHkChange(int hkChange) {
 		this.hkChange = hkChange;
 	}
 
-	public Integer getBank() {
+	public int getBank() {
 		return bank;
 	}
 
-	public void setBank(Integer bank) {
+	public void setBank(int bank) {
 		this.bank = bank;
 	}
 
-	public Integer getBankChange() {
+	public int getBankChange() {
 		return bankChange;
 	}
 
-	public void setBankChange(Integer bankChange) {
+	public void setBankChange(int bankChange) {
 		this.bankChange = bankChange;
 	}
 
-	public Integer getStatus() {
+	public int getStatus() {
 		return status;
 	}
 
-	public void setStatus(Integer status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 	

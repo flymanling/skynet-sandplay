@@ -9,13 +9,13 @@ public class RoundSet extends BaseEntity{
 
 	private String year;
 	
-	private Integer housePrice;
+	private int housePrice;
 	
-	private Integer etfPrice;
+	private int etfPrice;
 	
-	private Integer hkPrice;
+	private int hkPrice;
 	
-	private Integer bankPrice;
+	private int bankPrice;
 	
 	private Double financeRate;
 	
@@ -31,35 +31,35 @@ public class RoundSet extends BaseEntity{
 		this.year = year;
 	}
 
-	public Integer getHousePrice() {
+	public int getHousePrice() {
 		return housePrice;
 	}
 
-	public void setHousePrice(Integer housePrice) {
+	public void setHousePrice(int housePrice) {
 		this.housePrice = housePrice;
 	}
 
-	public Integer getEtfPrice() {
+	public int getEtfPrice() {
 		return etfPrice;
 	}
 
-	public void setEtfPrice(Integer etfPrice) {
+	public void setEtfPrice(int etfPrice) {
 		this.etfPrice = etfPrice;
 	}
 
-	public Integer getHkPrice() {
+	public int getHkPrice() {
 		return hkPrice;
 	}
 
-	public void setHkPrice(Integer hkPrice) {
+	public void setHkPrice(int hkPrice) {
 		this.hkPrice = hkPrice;
 	}
 
-	public Integer getBankPrice() {
+	public int getBankPrice() {
 		return bankPrice;
 	}
 
-	public void setBankPrice(Integer bankPrice) {
+	public void setBankPrice(int bankPrice) {
 		this.bankPrice = bankPrice;
 	}
 

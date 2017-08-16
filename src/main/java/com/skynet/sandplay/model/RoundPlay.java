@@ -11,9 +11,9 @@ public class RoundPlay extends BaseEntity{
 	
 	private String setId;
 	
-	private Integer index;
+	private int rank;
 	
-	private Integer status;
+	private int status;
 
 	public String getName() {
 		return name;
@@ -31,19 +31,19 @@ public class RoundPlay extends BaseEntity{
 		this.setId = setId;
 	}
 
-	public Integer getIndex() {
-		return index;
+	public int getRank() {
+		return rank;
 	}
 
-	public void setIndex(Integer index) {
-		this.index = index;
+	public void setRank(int rank) {
+		this.rank = rank;
 	}
 
-	public Integer getStatus() {
+	public int getStatus() {
 		return status;
 	}
 
-	public void setStatus(Integer status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 }

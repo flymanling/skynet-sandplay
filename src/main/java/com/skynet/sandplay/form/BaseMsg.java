@@ -16,6 +16,7 @@ import com.skynet.sandplay.util.ObjectUtil;
 
 public class BaseMsg {
 
+	public int serviceId;
 	public int actionId;
 	
 	public String content;
