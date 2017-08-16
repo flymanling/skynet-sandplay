@@ -20,7 +20,8 @@ public class ActionCtroller {
 	
 	@ActionMark(serviceId=1, actionId=1)
 	public String getUser(BaseMsg msg) {
-		String id = "40284cd85dbbc53e015dbbc540250000";
+//		String id = "402881e65de12d3f015de12d41a00000";
+		String id = msg.getAsString("id");
 		User user = userService.get(id);
 		if(user != null) {
 			return gson.toJson(user);

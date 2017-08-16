@@ -16,12 +16,10 @@
 				var data = {
 						serviceId:1,
 						actionId:1,
-						content:{
-							round:r	
-						}
+						content:'{id:\'402881e65de12d3f015de12d41a00000\'}'
 					};
 				$.post("/BaseAction",
-						{data:JSON.stringify(data)},
+						JSON.stringify(data),
 						function(rsp){
 				       		console.log(rsp);
 				    },"json");
