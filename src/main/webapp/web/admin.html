@@ -6,33 +6,46 @@
 	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">  
 	<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
 	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		window.onload = function(){
+			var data = {
+					serviceId:1,
+					actionId:2,
+					content:'{}'
+				};
+			$.post("/BaseAction",
+					JSON.stringify(data),
+					function(rsp){
+						if(rsp.status == 1) {
+							var step = document.getElementById("step");
+							step.value = rsp.data;
+						} else {
+							alert("获取进度失败");
+						}
+			    },"json");
+		}
+	
+		function setStep() {
+			stepResult.innerHTML = "正在调整进度……";
+			var step = document.getElementById("step");
+			var data = {
+					serviceId:2,
+					actionId:1,
+					content:'{step:'+step.value+'}'
+				};
+			$.post("/BaseAction",
+					JSON.stringify(data),
+					function(rsp){
+						var stepResult = document.getElementById("stepResult");
+						stepResult.innerHTML = rsp.msg;
+			    },"json");
+		}
+	</script>
 </head>
 <body>
-
-<form role="form">
-	<div class="form-group">
-		<label for="name">名称</label>
-		<input type="text" class="form-control" id="name" size="100"
-			   placeholder="请输入名称">
-	</div>
-	
-	<div class="checkbox">
-		<label>
-			<input type="checkbox"> 第一轮
-		</label>
-	</div>
-	<div class="checkbox">
-		<label>
-			<input type="checkbox"> 第二轮
-		</label>
-	</div>
-	<div class="checkbox">
-		<label>
-			<input type="checkbox"> 第三轮
-		</label>
-	</div>
-	<button type="submit" class="btn btn-default">提交</button>
-</form>
-	
+	<lable>进度控制：</lable>
+	<input type="text" id="step"> 
+	<input type="button" value="确认" onclick="setStep()">
+	<label id="stepResult"></label>
 </body>
 </html>

@@ -6,15 +6,16 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
-import com.skynet.sandplay.annotation.ActionMark;
-import com.skynet.sandplay.annotation.ServiceMark;
+import com.skynet.sandplay.annotation.ActionId;
+import com.skynet.sandplay.annotation.ServiceId;
 import com.skynet.sandplay.form.BaseMsg;
 import com.skynet.sandplay.model.Round;
+import com.skynet.sandplay.model.RoundPlay;
 import com.skynet.sandplay.model.User;
 import com.skynet.sandplay.service.IBaseService;
 import com.skynet.sandplay.util.StringUtil;
 
-@ServiceMark(1)
+@ServiceId(1)
 @Component("userActionCtroller")
 public class UserActionCtroller extends ActionCtroller{
 
@@ -23,7 +24,7 @@ public class UserActionCtroller extends ActionCtroller{
 	@Resource(name="roundService")
 	private IBaseService<Round, String> roundService;
 	
-	@ActionMark(1)
+	@ActionId(1)
 	public String getUser(BaseMsg msg) {
 //		String id = "402881e65de12d3f015de12d41a00000";
 		String id = msg.getAsString("id", null);
@@ -31,9 +32,11 @@ public class UserActionCtroller extends ActionCtroller{
 			return "id not found";
 		}
 		User user = userService.get(id);
-		if(user != null) {
-			return gson.toJson(user);
-		}
-		return "";
+		return retSuccess(user);
+	}
+	
+	@ActionId(2)
+	public String getCurrentStep(BaseMsg msg) {
+		return retSuccess(RoundPlay.currentRound);
 	}
 }

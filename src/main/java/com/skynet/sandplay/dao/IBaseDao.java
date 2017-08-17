@@ -1,6 +1,9 @@
 package com.skynet.sandplay.dao;
 
 import java.io.Serializable;
+import java.util.List;
+
+import com.skynet.sandplay.service.QuerySettable;
 
 public interface IBaseDao <T, PK extends Serializable>{
 
@@ -21,4 +24,12 @@ public interface IBaseDao <T, PK extends Serializable>{
      * @return ID 
      */  
     public PK save(T entity);  
+    
+    /**
+     * 查询列表
+     * @param hql
+     * @param callback
+     * @return
+     */
+    public List<T> list(String hql, QuerySettable callback);
 }

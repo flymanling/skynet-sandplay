@@ -14,8 +14,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import com.skynet.sandplay.annotation.ActionMark;
-import com.skynet.sandplay.annotation.ServiceMark;
+import com.skynet.sandplay.annotation.ActionId;
+import com.skynet.sandplay.annotation.ServiceId;
 import com.skynet.sandplay.form.BaseMsg;
 
 @Component("actionManager")
@@ -37,33 +37,44 @@ public class ActionManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(cList != null) {
-			for(Class<?> c : cList) {
-				if(c.isAnnotationPresent(ServiceMark.class) && c.isAnnotationPresent(Component.class)) {
-					ServiceMark serviceMark = (ServiceMark) c.getAnnotation(ServiceMark.class);
-					Component conponent = c.getAnnotation(Component.class);
-					int serviceId = serviceMark.value();
-					final ActionCtroller actionCtroller = SpringContext.getBean(conponent.value());
-					System.out.println("resource:" + conponent.value() + ", serviceId:" + serviceId + ", actionCtroller class" + actionCtroller);
-					services[serviceId] = actionCtroller;
-					Method[] methods = c.getMethods();
-					for(final Method method : methods) {
-						if(method.isAnnotationPresent(ActionMark.class)) {
-							ActionMark annotation = method.getAnnotation(ActionMark.class);
-							int actionId = annotation.value();
-							System.out.println("serviceId:" + serviceId + ", actionId:" + actionId);
-							Action action = new Action() {
-								@Override
-								public String execute(BaseMsg msg) throws Exception{
-									return (String)method.invoke(actionCtroller, msg);
+		try{
+			if(cList != null) {
+				for(Class<?> c : cList) {
+					if(c.isAnnotationPresent(ServiceId.class) && c.isAnnotationPresent(Component.class)) {
+						ServiceId serviceMark = (ServiceId) c.getAnnotation(ServiceId.class);
+						Component conponent = c.getAnnotation(Component.class);
+						int serviceId = serviceMark.value();
+						final ActionCtroller actionCtroller = SpringContext.getBean(conponent.value());
+						System.out.println("resource:" + conponent.value() + ", serviceId:" + serviceId + ", actionCtroller class" + actionCtroller);
+						if(services[serviceId] == null) {
+							services[serviceId] = actionCtroller;
+						} else {
+							throw new Exception("serviceId:" + serviceId + "已经存在，" + services[serviceId]);
+						}
+						Method[] methods = c.getMethods();
+						for(final Method method : methods) {
+							if(method.isAnnotationPresent(ActionId.class)) {
+								ActionId annotation = method.getAnnotation(ActionId.class);
+								int actionId = annotation.value();
+								System.out.println("serviceId:" + serviceId + ", actionId:" + actionId);
+								Action action = new Action() {
+									@Override
+									public String execute(BaseMsg msg) throws Exception{
+										return (String)method.invoke(actionCtroller, msg);
+									}
+								};
+								if(actions[serviceId][actionId] == null) {
+									actions[serviceId][actionId] = action;
+								} else {
+									throw new Exception("serviceId:" + serviceId + ", actionId:" + actionId + " 已经存在！" + actions[serviceId][actionId] );
 								}
-								
-							};
-							actions[serviceId][actionId] = action;
+							}
 						}
 					}
 				}
 			}
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
 	}
 	

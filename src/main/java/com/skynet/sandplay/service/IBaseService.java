@@ -1,6 +1,7 @@
 package com.skynet.sandplay.service;
 
 import java.io.Serializable;
+import java.util.List;
 
 public interface IBaseService <T, PK extends Serializable>{
 
@@ -20,4 +21,6 @@ public interface IBaseService <T, PK extends Serializable>{
      * @return ID 
      */  
     public PK save(T entity); 
+    
+    public List<T> list(String hql, QuerySettable callback);
 }

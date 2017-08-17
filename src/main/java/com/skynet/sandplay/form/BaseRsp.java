@@ -2,7 +2,7 @@ package com.skynet.sandplay.form;
 
 public class BaseRsp {
 
-	int status;
-	String msg;
-	String data;
+	public int status;
+	public String msg;
+	public Object data;
 }

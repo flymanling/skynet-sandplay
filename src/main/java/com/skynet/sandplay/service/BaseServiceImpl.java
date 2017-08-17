@@ -2,6 +2,7 @@ package com.skynet.sandplay.service;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -34,4 +35,8 @@ public class BaseServiceImpl<T extends BaseEntity, PK extends Serializable> impl
     	entity.setModifyDate(new Date());
         return baseDao.save(entity);  
     }  
+    
+    public List<T> list(String hql, QuerySettable callback) {
+    	return baseDao.list(hql, callback);
+    }
 }

@@ -3,12 +3,16 @@ package com.skynet.sandplay.dao;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
+
+import com.skynet.sandplay.service.QuerySettable;
 
 @Repository("baseDao")
 public class BaseDaoImpl <T, PK extends Serializable> implements IBaseDao<T, PK>{  
@@ -45,5 +49,13 @@ public class BaseDaoImpl <T, PK extends Serializable> implements IBaseDao<T, PK>
 //      Assert.assertNotNull("entity is required", entity);  
       return (PK) getSession().save(entity);  
   }  
+  
+  public List<T> list(String hql, QuerySettable callback) {
+	  Query query = getSession().createQuery(hql);
+	  if(callback != null) {
+		  callback.setQuery(query);
+	  }
+	  return query.list();
+  }
 
 }

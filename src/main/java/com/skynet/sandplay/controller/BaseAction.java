@@ -2,6 +2,7 @@ package com.skynet.sandplay.controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -30,6 +31,8 @@ public class BaseAction {
 	
 	@RequestMapping
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.setCharacterEncoding("UTF-8");
+		resp.setCharacterEncoding("UTF-8");
 		String data = "";
 		String method = req.getMethod();
 		if (method.equalsIgnoreCase("post")) {// post请求
@@ -45,7 +48,9 @@ public class BaseAction {
 			BaseMsg msg = gson.fromJson(data, BaseMsg.class);
 			result = actionManager.onBaseMsg(msg);
 		}
-		resp.getWriter().write(result);
+		resp.setHeader("content-type","text/html;charset=UTF-8");
+		OutputStream out = resp.getOutputStream();
+		out.write(result.getBytes("UTF-8"));
 	}
 	
 	private static String getBodyString(BufferedReader br) {
