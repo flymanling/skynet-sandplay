@@ -8,8 +8,9 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.skynet.sandplay.dao.IBaseDao;
+import com.skynet.sandplay.dao.interfaces.IBaseDao;
 import com.skynet.sandplay.model.BaseEntity;
+import com.skynet.sandplay.service.interfaces.IBaseService;
 
 //@Transactional
 @Service("baseService")
@@ -38,5 +39,13 @@ public class BaseServiceImpl<T extends BaseEntity, PK extends Serializable> impl
     
     public List<T> list(String hql, QuerySettable callback) {
     	return baseDao.list(hql, callback);
+    }
+    
+    public boolean update(T entity) {
+    	return baseDao.update(entity);
+    }
+    
+    public boolean delete(PK pk) {
+    	return baseDao.delete(pk);
     }
 }

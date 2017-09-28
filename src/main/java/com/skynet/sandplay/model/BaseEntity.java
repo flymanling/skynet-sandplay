@@ -19,7 +19,7 @@ public class BaseEntity implements Serializable{
     /** 
      * ID 
      */  
-    private String id;  
+    private int id;  
     /** 
      * 创建日期 
      */  
@@ -30,14 +30,14 @@ public class BaseEntity implements Serializable{
     private Date modifyDate;  
       
     @Id  
-    @Column(length = 32, nullable = true)  
-    @GeneratedValue(generator = "uuid")  
-    @GenericGenerator(name = "uuid", strategy = "uuid")  
-    public String getId() {  
+//    @Column(length = 32, nullable = true)  
+    @GeneratedValue(generator = "id")  
+    @GenericGenerator(name = "id", strategy = "increment")  
+    public int getId() {  
         return id;  
     }  
   
-    public void setId(String id) {  
+    public void setId(int id) {  
         this.id = id;  
     }  
   
@@ -58,11 +58,11 @@ public class BaseEntity implements Serializable{
         this.modifyDate = modifyDate;  
     }  
   
-    @Override  
-    public int hashCode() {  
-        return id == null ? System.identityHashCode(this) : id.hashCode();  
-    }  
-  
+//    @Override  
+//    public int hashCode() {  
+//        return id == null ? System.identityHashCode(this) : id.hashCode();  
+//    }  
+//  
     @Override  
     public boolean equals(Object obj) {  
         if (this == obj) {  
@@ -75,11 +75,11 @@ public class BaseEntity implements Serializable{
             return false;  
         }  
         final BaseEntity other = (BaseEntity) obj;  
-        if (id == null) {  
-            if (other.getId() != null) {  
+        if (id == 0) {  
+            if (other.getId() != 0) {  
                 return false;  
             }  
-        } else if (!id.equals(other.getId())) {  
+        } else if (id != other.getId()) {  
             return false;  
         }  
         return true;  

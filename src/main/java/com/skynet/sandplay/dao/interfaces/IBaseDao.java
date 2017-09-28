@@ -1,4 +1,4 @@
-package com.skynet.sandplay.dao;
+package com.skynet.sandplay.dao.interfaces;
 
 import java.io.Serializable;
 import java.util.List;
@@ -32,4 +32,8 @@ public interface IBaseDao <T, PK extends Serializable>{
      * @return
      */
     public List<T> list(String hql, QuerySettable callback);
+    
+    public boolean update(T entity) ;
+    
+    public boolean delete(PK pk);
 }

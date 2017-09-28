@@ -6,8 +6,64 @@
 	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">  
 	<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
 	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<script type="text/javascript">
-	window.onload = function(){
+	
+	<style type="text/css">
+		table{
+			background:#F0FFFF;
+			padding:20px;
+			margin:20px;
+			text-align:center;
+			line-height:30px;
+			width:1200px;
+		}
+	</style>
+</head>
+<body>
+
+<div>
+	价格列表
+</div>
+<div>
+	<button onclick="window.open('roundset_add.html', '_blank','width=500,height=500,left=100, top=100,menubar=no,toolbar=no, directories=no,status=no,scrollbars=yes,resizable=yes')">新增</button>
+</div>
+<div>
+	<table border=1>
+		<thead align=center>
+		<tr>
+			<th>轮次</th>
+			<th>保险价格</th>
+			<th>理财价格</th>
+			<th>黄金价格</th>
+			<th>香港中国价格</th>
+			<th>etf价格</th>
+			<th>浦发价格</th>
+			<th>信托价格</th>
+			<th>住宅价格</th>
+			<th>商业地产价格</th>
+			<th>住宅贷款利率</th>
+			<th>商业地产贷款利率</th>
+			<th>信用贷款利率</th>
+			<th>是否失业</th>
+			<th>操作</th>
+			
+		</tr>
+		</thead>
+		<tbody id="list">
+			
+		</tbody>
+	</table>
+</div>
+</body>
+<script type="text/javascript">
+	var rowDataMap = {};
+	
+	function setRowMap(rowData) {
+		for(var i=0;i<rowData.length;i++) {
+			rowDataMap[rowData[i].round] = rowData[i];
+		}
+	}
+	
+	$(document).ready(function(){
 		var content = {};
 		var data = {
 				serviceId:2,
@@ -17,20 +73,30 @@
 		$.post("/BaseAction",
 				JSON.stringify(data),
 				function(rsp){
-		       		console.log(rsp);
+		       		//console.log(rsp);
 		       		if(rsp.status == 1) {
+		       			setRowMap(rsp.data);
 		     	  		var table = $("#list");
 		     	  		var rows = "";
+		     	  		var heads = ["round", "insurePrice", "bankPrice", "goldPrice", "hkPrice", "etfPrice",
+		     	  		             "pufaPrice","trustPrice","house","land","houseRate","landRate","creditRate","lostJob"];
 		       			rsp.data.forEach(function(roundSet){
 		       				var row = "<tr>";
-		       				row += "<td>" + roundSet.year + "</td>";
-		       				row += "<td>" + roundSet.housePrice + "</td>";
-		       				row += "<td>" + roundSet.etfPrice + "</td>";
-		       				row += "<td>" + roundSet.hkPrice + "</td>";
-		       				row += "<td>" + roundSet.bankPrice + "</td>";
-		       				row += "<td>" + roundSet.financeRate + "</td>";
-		       				row += "<td>" + roundSet.houseRate + "</td>";
-		       				row += "<td>" + roundSet.creditRate + "</td>";
+		       				for(var i=0;i<heads.length;i++) {
+		       					var p = heads[i];
+		       					if(p=='house' || p=="land") {
+		       						row += "<td>" + roundSet[p+'Price'] + " | " + roundSet[p+'PayPrice'] + "</td>";
+		       					} else if(p=='lostJob') {
+		       						row += "<td>" + (roundSet[p]?"是":"否") + "</td>";
+		       					} else {
+			       					row += "<td>" + roundSet[p] + "</td>";
+		       					}
+		       				}
+		       				
+		       				row += "<td>";
+		       				row += " &nbsp;<input type=\"button\" value=\"修改\" class=\"updateBtn\" /> &nbsp;";
+		       				row += " <input type=\"button\" value=\"删除\" class=\"delBtn\" />"
+		       				row += "</td>";
 		       				row += "</tr>";
 		       				rows += row;
 		       			});
@@ -39,35 +105,50 @@
 		       		
 		       		
 		    },"json");
-	}
-	</script>
-</head>
-<body>
-
-<div>
-	价格列表
-</div>
-<div>
-	<button onclick="window.open('roundset_add.html', '_blank','width=500,height=400,menubar=no,toolbar=no, location=no,directories=no,status=no,scrollbars=yes,resizable=yes')">新增</button>
-</div>
-<div>
-	<table border=1 width=500>
-		<thead>
-		<tr>
-			<th>年份</th>
-			<th>房贷价格</th>
-			<th>etf价格</th>
-			<th>香港价格</th>
-			<th>银行价格</th>
-			<th>理财利率</th>
-			<th>房贷利率</th>
-			<th>信贷利率</th>
-		</tr>
-		</thead>
-		<tbody id="list">
+		
+		//委托事件
+		$("table").delegate(".updateBtn","click",function() {
+			var round = $(this).parents("tr").children(0).html();
+			var roundData = rowDataMap[round];
+			var win = window.open("roundset_add.html", "", "menubar=no,width=800,height=500,resizeable=yes");
+			win.onload = function() {
+				for(var p in roundData) {
+					if(typeof(p) != 'function') {
+						if(roundData[p]==true || roundData[p]==false) {
+							$(win.document).find('input[name="'+p+'"][value="'+roundData[p]+'"]').attr('checked',"checked");
+						} else {
+							$(win.document).find('input[name="'+p+'"]').val(roundData[p]);
+						}
+							
+					}
+				}
+			}
+		});
+		
+		$("table").delegate(".delBtn","click",function() {
+			if(!window.confirm("确定要删除吗？")) {
+				return;
+			}
 			
-		</tbody>
-	</table>
-</div>
-</body>
+			var round = $(this).parents("tr").children(0).html();
+			var roundData = rowDataMap[round];
+			content["id"] = roundData.id;
+			var data = {
+					serviceId:2,
+					actionId:5,
+					content:JSON.stringify(content)
+			}
+			$.post("/BaseAction",
+				JSON.stringify(data),
+				function(rsp){
+					console.log(rsp);
+					alert(rsp.msg);
+					if(rsp.status == 1) {
+						
+					}
+					window.location.reload();
+			},'json');
+		});
+	});
+	</script>
 </html>

@@ -9,6 +9,10 @@ public class RoundPlay extends BaseEntity{
 
 	public static int currentRound = 0;
 	
+	public static int currentGrade = 15;
+	
+	public static String lockPwd = "";
+	
 	private String name;
 	
 	private String setId;

@@ -1,7 +1,9 @@
-package com.skynet.sandplay.service;
+package com.skynet.sandplay.service.interfaces;
 
 import java.io.Serializable;
 import java.util.List;
+
+import com.skynet.sandplay.service.QuerySettable;
 
 public interface IBaseService <T, PK extends Serializable>{
 
@@ -23,4 +25,8 @@ public interface IBaseService <T, PK extends Serializable>{
     public PK save(T entity); 
     
     public List<T> list(String hql, QuerySettable callback);
+    
+    public boolean update(T entity);
+    
+    public boolean delete(PK pk);
 }

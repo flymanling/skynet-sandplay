@@ -26,6 +26,10 @@
         <property name="suffix" value=".jsp"></property>  
     </bean>  
     
+    <mvc:resources location="/,/web/" mapping="/*.html"/>
+    <mvc:resources location="/,/web/js/" mapping="js/*.js"/>
+    <mvc:resources location="/,/web/img/" mapping="img/*.jpeg"/>
+    
     <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
 		<property name="messageConverters">
 			<list>

@@ -3,6 +3,9 @@ package com.skynet.sandplay.form;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -21,6 +24,10 @@ public class BaseMsg {
 	
 	public String content;
 	
+	public Integer userId;
+	public String userName;
+	public HttpServletRequest req;
+	public HttpServletResponse resp;
 	private static Gson gson = new Gson();
 	private JsonObject jsonObject;
 	private static Gson _gson = new GsonBuilder().registerTypeAdapter(Double.class, new JsonSerializer<Double>() {

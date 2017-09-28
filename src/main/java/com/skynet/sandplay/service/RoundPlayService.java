@@ -4,14 +4,14 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.skynet.sandplay.dao.IBaseDao;
+import com.skynet.sandplay.dao.interfaces.IBaseDao;
 import com.skynet.sandplay.model.RoundPlay;
 
 @Service("roundPlayService")
-public class RoundPlayService  extends BaseServiceImpl<RoundPlay, String>{
+public class RoundPlayService  extends BaseServiceImpl<RoundPlay, Integer>{
 
 	@Resource(name="roundPlayDao")
-    public void setBaseDao(IBaseDao<RoundPlay, String> baseDao) {  
+    public void setBaseDao(IBaseDao<RoundPlay, Integer> baseDao) {  
         super.setBaseDao(baseDao);
     }  
 

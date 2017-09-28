@@ -33,6 +33,10 @@ public class ActionCtroller {
 		return gson.toJson(rsp);
 	}
 	
+	public String retByRs(boolean rs) {
+		return rs?retSuccess():retFail("操作失败");
+	}
+	
 	public String getRoundStep(BaseMsg msg) {
 		return null;
 	}

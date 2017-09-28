@@ -3,9 +3,9 @@ package com.skynet.sandplay;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.skynet.sandplay.dao.IBaseDao;
+import com.skynet.sandplay.dao.interfaces.IBaseDao;
 import com.skynet.sandplay.model.User;
-import com.skynet.sandplay.service.IBaseService;
+import com.skynet.sandplay.service.interfaces.IBaseService;
 
 /**
  * Hello world!

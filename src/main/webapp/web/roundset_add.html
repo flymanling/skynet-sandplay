@@ -7,6 +7,17 @@
 	<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
 	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
+		var round = null;
+		
+		$(document).ready(function(){
+			if(round != null) {
+				alert(round);
+			}
+			
+		});
+		
+		
+		
 		//从from获取数据，转为对象  
 		function fromToJson(form) {  
 		    var result = {};  
@@ -18,7 +29,7 @@
 		        } else {  
 		            result[field.name] = field.value;  
 		        }  
-		    }  
+		    }
 		    return result;  
 		}  
 	
@@ -47,18 +58,43 @@
 		<table>
 			<tr>
 				<td>
-					<label>年份</label>
+					<label>轮次</label>
 				</td>
 				<td>
-					<input name="year">
+					<input type="hidden" name="id" value="0"/>
+					<input name="round">
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<label>房地产</label>
+					<label>保险价格</label>
 				</td>
 				<td>
-					<input name="housePrice">
+					<input name="insurePrice">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>银行理财产品价格</label>
+				</td>
+				<td>
+					<input name="bankPrice">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>黄金价格</label>
+				</td>
+				<td>
+					<input name="goldPrice">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>香港中国</label>
+				</td>
+				<td>
+					<input name="hkPrice">
 				</td>
 			</tr>
 			<tr>
@@ -71,18 +107,50 @@
 			</tr>
 			<tr>
 				<td>
-					<label>中国香港</label>
+					<label>浦发银行</label>
 				</td>
 				<td>
-					<input name="hkPrice">
+					<input name="pufaPrice">
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<label>银行理财</label>
+					<label>信托价格</label>
 				</td>
 				<td>
-					<input name="bankPrice">
+					<input name="trustPrice">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>住宅价格</label>
+				</td>
+				<td>
+					<input name="housePrice">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>住宅首付</label>
+				</td>
+				<td>
+					<input name="housePayPrice">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>商业地产价格</label>
+				</td>
+				<td>
+					<input name="landPrice">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>商业地产首付</label>
+				</td>
+				<td>
+					<input name="landPayPrice">
 				</td>
 			</tr>
 			<tr>
@@ -90,15 +158,24 @@
 					<label>理财产品利率</label>
 				</td>
 				<td>
-					<input name="financeRate">
+					<input name="bankRate">
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<label>房贷利率</label>
+					<label>住房贷款利率</label>
 				</td>
 				<td>
 					<input name="houseRate">
+				</td>
+			</tr>
+			
+			<tr>
+				<td>
+					<label>商业贷款利率</label>
+				</td>
+				<td>
+					<input name="landRate">
 				</td>
 			</tr>
 			<tr>
@@ -107,6 +184,15 @@
 				</td>
 				<td>
 					<input name="creditRate">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>是否失业</label>
+				</td>
+				<td>
+					<input name="lostJob" type="radio" value="true" > 是
+					<input name="lostJob" type="radio" value="false" > 否
 				</td>
 			</tr>
 			<tr>

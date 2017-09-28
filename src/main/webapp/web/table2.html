@@ -1,0 +1,142 @@
+<h6>现金流量表</h6>
+<form id="changeForm">
+			<table border=1 class="cashflow">
+				<thead>
+					<tr class="head">
+						<td rowspan=2>项目名称</td>
+						<td rowspan=2>现金（上轮结余）</td>
+						<td rowspan=2>家庭收支</td>
+						<td rowspan=2>信用贷款</td>
+						<td rowspan=2>商业地产租金收入</td>
+						<td rowspan=2>信用贷款利息支出</td>
+						<td rowspan=2>房贷利息支出</td>
+						<td colspan=2>房产加贷</td>
+						<td rowspan=2>期末现金（结余）</td>
+					</tr>
+					<tr class="head">
+						<td>(1)住宅加贷</td>
+						<td>(2)商业地产加贷</td>
+					</tr>
+					
+					<tr>
+						<td>流入流出</td>
+						<td><span class="cashChange"></span></td>
+						<td><span class="surplus"></span></td>
+						<td>
+							<input class="creditLoanChange" name="creditLoanChange" type="text">
+						</td>
+						<td><span class="rent"></span></td>
+						<td><span class="creditLoanInterestAfter"></span></td>
+						<td><span class="houseInterestAfter"></span></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					
+					<tr>
+						<td>结余</td>
+						<td><span class="old_cash cashStyle"></span></td>
+						<td><span class="surplus"></span></td>
+						<td><span class="creditLoan"></span></td>
+						<td><span class="rent"></span></td>
+						<td><span class="creditLoanInterestAfter"></span></td>
+						<td><span class="houseInterestAfter"></span></td>
+						<td><span class=""></span></td>
+						<td><span class=""></span></td>
+						<td><span class="cash cashStyle"></span></td>
+					</tr>
+					<tr class="head" height=30 background="#F5FFFA">
+						<td colspan=10>交易区</td>
+					</tr>
+					<tr class="head">
+						<td>项目名称</td>
+						<td>保险</td>
+						<td>银行理财产品</td>
+						<td>美-黄金</td>
+						<td>香港中国</td>
+						<td>ETF指数基金</td>
+						<td>浦发银行</td>
+						<td>信托产品</td>
+						<td>住宅(套)</td>
+						<td>商业地产(套)</td>
+					</tr>
+					<tr>
+						<td>流入流出</td>
+						<td>
+						<input type="hidden" name="round" id="roundStep" >
+						<input type="text" class="insureChange" name="insureChange">
+						</td>
+						<td><input type="text" class="bankChange" name="bankChange"></td>
+						<td><input type="text" class="goldChange" name="goldChange"></td>
+						<td><input type="text" class="hkChange" name="hkChange"></td>
+						<td><input type="text" class="etfChange" name="etfChange"></td>
+						<td><input type="text" class="pufaChange" name="pufaChange"></td>
+						<td><input type="text" class="trustChange" name="trustChange"></td>
+						<td><input type="text" class="houseChange" name="houseChange"></td>
+						<td><input type="text" class="landChange" name="landChange"></td>
+					</tr>
+					
+					<tr>
+						<td>结余</td>
+						<td><span class="insure"></span></td>
+						<td><span class="bank"></span></td>
+						<td><span class="gold"></span></td>
+						<td><span class="hk"></span></td>
+						<td><span class="etf"></span></td>
+						<td><span class="pufa"></span></td>
+						<td><span class="trust"></span></td>
+						<td><span class="houseNumAfter"></span></td>
+						<td><span class="landNumAfter"></span></td>
+						
+					</tr>
+					<tr height=40>
+						<td colspan=10>
+							<input type="button" onclick="view()" value="预览"/>
+						</td>
+					</tr>
+					
+					
+					
+				</thead>
+			</table>
+					</form>
+					
+	<h6>投资现况表</h6>
+	<table border=1>
+		<thead>
+			<tr class="title title2" >
+				<td colspan=6>投资现况表</td>
+				<td>优化配置结果</td>
+			</tr>
+			<tr class="head">
+				<td>净总比（%）</td>
+				<td>理财产品利率</td>
+				<td>住房贷款利率</td>
+				<td>商业贷款利率</td>
+				<td>信用贷款利率</td>
+				<td>银行授信额度上限</td>
+				<td>净总比</td>
+			</tr>
+			<tr>
+				<td>100%</td>
+				<td><span class="bankRate"></span></td>
+				<td><span class="houseRate"></span></td>
+				<td><span class="landRate"></span></td>
+				<td><span class="creditRate"></span></td>
+				<td><span class="bankLimit"></span></td>
+				<td><span class="deptToAsset"></span></td>
+			</tr>
+			<tr height=40>
+				<td colspan=8>
+					<input onclick="submitRound()" id="submitRound" type="button" value="提交"/>
+					<input onclick="showLock()" id="unlock" style="display:none;" type="button" value="解锁" lock=1 />
+					<div style="display:none;" id="unlockDiv">
+					<p>请联系教练输入密码解锁：</p>
+						<input type="password" id="lockField"/>
+						<input type="button" id="unlockBtn" onclick="unlock()" value="提交">
+					</div>
+				</td>
+			</tr>
+		</thead>
+	</table>
+					

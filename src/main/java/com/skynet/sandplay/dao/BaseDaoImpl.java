@@ -12,6 +12,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
+import com.skynet.sandplay.dao.interfaces.IBaseDao;
 import com.skynet.sandplay.service.QuerySettable;
 
 @Repository("baseDao")
@@ -47,7 +48,10 @@ public class BaseDaoImpl <T, PK extends Serializable> implements IBaseDao<T, PK>
 
   public PK save(T entity) {  
 //      Assert.assertNotNull("entity is required", entity);  
-      return (PK) getSession().save(entity);  
+	  Session session = getSession();
+      PK id = (PK) session.save(entity);  
+      session.flush();
+      return id;
   }  
   
   public List<T> list(String hql, QuerySettable callback) {
@@ -58,4 +62,30 @@ public class BaseDaoImpl <T, PK extends Serializable> implements IBaseDao<T, PK>
 	  return query.list();
   }
 
+  public boolean update(T entity) {
+	 try{
+		Session session = getSession();
+		session.update(entity);
+		session.flush();
+		 return true;
+	 }catch (Exception e) {
+		 e.printStackTrace();
+		 return false;
+	 }
+  }
+  
+  public boolean delete(PK pk) {
+	  try{
+			Session session = getSession();
+			Object object = session.get(entityClass, pk);
+			if(object != null) {
+				session.delete(object);
+			}
+			session.flush();
+			 return true;
+		 }catch (Exception e) {
+			 e.printStackTrace();
+			 return false;
+		 }
+  }
 }

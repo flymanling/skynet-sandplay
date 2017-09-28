@@ -9,8 +9,8 @@
 	<script type="text/javascript">
 		window.onload = function(){
 			var data = {
-					serviceId:1,
-					actionId:2,
+					serviceId:2,
+					actionId:4,
 					content:'{}'
 				};
 			$.post("/BaseAction",
@@ -18,7 +18,9 @@
 					function(rsp){
 						if(rsp.status == 1) {
 							var step = document.getElementById("step");
-							step.value = rsp.data;
+							step.value = rsp.data.currentStep;
+							$('#grade').val(rsp.data.currentGrade);
+							$('#lockPwd').val(rsp.data.lockPwd);
 						} else {
 							alert("获取进度失败");
 						}
@@ -26,7 +28,7 @@
 		}
 	
 		function setStep() {
-			stepResult.innerHTML = "正在调整进度……";
+			$('#stepResult').html("正在调整进度……");
 			var step = document.getElementById("step");
 			var data = {
 					serviceId:2,
@@ -36,16 +38,66 @@
 			$.post("/BaseAction",
 					JSON.stringify(data),
 					function(rsp){
-						var stepResult = document.getElementById("stepResult");
-						stepResult.innerHTML = rsp.msg;
+						alert(rsp.msg);
+			    },"json");
+		}
+		
+		function setGrade() {
+			$('#gradeResult').html("正在设定班级……");
+			var grade = document.getElementById("grade");
+			var data = {
+					serviceId:2,
+					actionId:1,
+					content:'{grade:'+grade.value+'}'
+				};
+			$.post("/BaseAction",
+					JSON.stringify(data),
+					function(rsp){
+						alert(rsp.msg);
+			    },"json");
+		}
+		
+		function setPwd() {
+			$('#pwdResult').html("正在设定密码……");
+			var lockPwd = document.getElementById("lockPwd");
+			var data = {
+					serviceId:2,
+					actionId:1,
+					content:'{lockPwd:'+lockPwd.value+'}'
+				};
+			$.post("/BaseAction",
+					JSON.stringify(data),
+					function(rsp){
+						alert(rsp.msg);
 			    },"json");
 		}
 	</script>
 </head>
 <body>
-	<lable>进度控制：</lable>
+<div>
+	<h5>价格利率设定</h5>
+	<button>
+		<a href="roundset_list.html" target="_blank">点击前往</a>
+	</button>
+</div>
+<br>
+<div>
+	<h5>进度控制：</h5>
 	<input type="text" id="step"> 
 	<input type="button" value="确认" onclick="setStep()">
-	<label id="stepResult"></label>
+</div>
+<br>
+
+<div>
+	<h5>班级设定</h5>
+	<input type="text" id="grade"> 
+	<input type="button" value="确认" onclick="setGrade()">
+</div>
+
+<div>
+	<h5>教练密码</h5>
+	<input type="text" id="lockPwd"> 
+	<input type="button" value="确认" onclick="setPwd()">
+</div>
 </body>
 </html>
