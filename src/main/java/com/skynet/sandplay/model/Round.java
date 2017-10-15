@@ -38,16 +38,16 @@ public class Round extends BaseEntity{
 	private double insure;
 	private double insureAfter;
 	private double insureChange;
-	private int insureNum;
-	private int insureNumAfter;
+	private double insureNum;
+	private double insureNumAfter;
 	/**
 	 * 银行理财
 	 */
 	private double bank;
 	private double bankAfter;
 	private double bankChange;
-	private int bankNum;
-	private int bankNumAfter;
+	private double bankNum;
+	private double bankNumAfter;
 	
 	/**
 	 * 黄金
@@ -55,8 +55,8 @@ public class Round extends BaseEntity{
 	private double gold;
 	private double goldAfter;
 	private double goldChange;
-	private int goldNum;
-	private int goldNumAfter;
+	private double goldNum;
+	private double goldNumAfter;
 	
 	/**
 	 * 中国香港
@@ -64,8 +64,8 @@ public class Round extends BaseEntity{
 	private double hk;
 	private double hkAfter;
 	private double hkChange;
-	private int hkNum;
-	private int hkNumAfter;
+	private double hkNum;
+	private double hkNumAfter;
 	
 	/**
 	 * etf
@@ -73,8 +73,8 @@ public class Round extends BaseEntity{
 	private double etf;
 	private double etfAfter;
 	private double etfChange;
-	private int etfNum;
-	private int etfNumAfter;
+	private double etfNum;
+	private double etfNumAfter;
 	
 	/**
 	 * 浦发银行
@@ -82,8 +82,8 @@ public class Round extends BaseEntity{
 	private double pufa;
 	private double pufaAfter;
 	private double pufaChange;
-	private int pufaNum;
-	private int pufaNumAfter;
+	private double pufaNum;
+	private double pufaNumAfter;
 	
 	/**
 	 * 信托
@@ -91,8 +91,8 @@ public class Round extends BaseEntity{
 	private double trust;
 	private double trustAfter;
 	private double trustChange;
-	private int trustNum;
-	private int trustNumAfter;
+	private double trustNum;
+	private double trustNumAfter;
 	
 	/**
 	 * 住宅
@@ -247,11 +247,11 @@ public class Round extends BaseEntity{
 		this.insureChange = insureChange;
 	}
 
-	public int getInsureNum() {
+	public double getInsureNum() {
 		return insureNum;
 	}
 
-	public void setInsureNum(int insureNum) {
+	public void setInsureNum(double insureNum) {
 		this.insureNum = insureNum;
 	}
 
@@ -271,11 +271,11 @@ public class Round extends BaseEntity{
 		this.bankChange = bankChange;
 	}
 
-	public int getBankNum() {
+	public double getBankNum() {
 		return bankNum;
 	}
 
-	public void setBankNum(int bankNum) {
+	public void setBankNum(double bankNum) {
 		this.bankNum = bankNum;
 	}
 
@@ -295,11 +295,11 @@ public class Round extends BaseEntity{
 		this.goldChange = goldChange;
 	}
 
-	public int getGoldNum() {
+	public double getGoldNum() {
 		return goldNum;
 	}
 
-	public void setGoldNum(int goldNum) {
+	public void setGoldNum(double goldNum) {
 		this.goldNum = goldNum;
 	}
 
@@ -319,11 +319,11 @@ public class Round extends BaseEntity{
 		this.hkChange = hkChange;
 	}
 
-	public int getHkNum() {
+	public double getHkNum() {
 		return hkNum;
 	}
 
-	public void setHkNum(int hkNum) {
+	public void setHkNum(double hkNum) {
 		this.hkNum = hkNum;
 	}
 
@@ -343,11 +343,11 @@ public class Round extends BaseEntity{
 		this.etfChange = etfChange;
 	}
 
-	public int getEtfNum() {
+	public double getEtfNum() {
 		return etfNum;
 	}
 
-	public void setEtfNum(int etfNum) {
+	public void setEtfNum(double etfNum) {
 		this.etfNum = etfNum;
 	}
 
@@ -367,11 +367,11 @@ public class Round extends BaseEntity{
 		this.pufaChange = pufaChange;
 	}
 
-	public int getPufaNum() {
+	public double getPufaNum() {
 		return pufaNum;
 	}
 
-	public void setPufaNum(int pufaNum) {
+	public void setPufaNum(double pufaNum) {
 		this.pufaNum = pufaNum;
 	}
 
@@ -391,11 +391,11 @@ public class Round extends BaseEntity{
 		this.trustChange = trustChange;
 	}
 
-	public int getTrustNum() {
+	public double getTrustNum() {
 		return trustNum;
 	}
 
-	public void setTrustNum(int trustNum) {
+	public void setTrustNum(double trustNum) {
 		this.trustNum = trustNum;
 	}
 
@@ -687,59 +687,59 @@ public class Round extends BaseEntity{
 		this.netAssetAfter = netAssetAfter;
 	}
 
-	public int getInsureNumAfter() {
+	public double getInsureNumAfter() {
 		return insureNumAfter;
 	}
 
-	public void setInsureNumAfter(int insureNumAfter) {
+	public void setInsureNumAfter(double insureNumAfter) {
 		this.insureNumAfter = insureNumAfter;
 	}
 
-	public int getBankNumAfter() {
+	public double getBankNumAfter() {
 		return bankNumAfter;
 	}
 
-	public void setBankNumAfter(int bankNumAfter) {
+	public void setBankNumAfter(double bankNumAfter) {
 		this.bankNumAfter = bankNumAfter;
 	}
 
-	public int getGoldNumAfter() {
+	public double getGoldNumAfter() {
 		return goldNumAfter;
 	}
 
-	public void setGoldNumAfter(int goldNumAfter) {
+	public void setGoldNumAfter(double goldNumAfter) {
 		this.goldNumAfter = goldNumAfter;
 	}
 
-	public int getHkNumAfter() {
+	public double getHkNumAfter() {
 		return hkNumAfter;
 	}
 
-	public void setHkNumAfter(int hkNumAfter) {
+	public void setHkNumAfter(double hkNumAfter) {
 		this.hkNumAfter = hkNumAfter;
 	}
 
-	public int getEtfNumAfter() {
+	public double getEtfNumAfter() {
 		return etfNumAfter;
 	}
 
-	public void setEtfNumAfter(int etfNumAfter) {
+	public void setEtfNumAfter(double etfNumAfter) {
 		this.etfNumAfter = etfNumAfter;
 	}
 
-	public int getPufaNumAfter() {
+	public double getPufaNumAfter() {
 		return pufaNumAfter;
 	}
 
-	public void setPufaNumAfter(int pufaNumAfter) {
+	public void setPufaNumAfter(double pufaNumAfter) {
 		this.pufaNumAfter = pufaNumAfter;
 	}
 
-	public int getTrustNumAfter() {
+	public double getTrustNumAfter() {
 		return trustNumAfter;
 	}
 
-	public void setTrustNumAfter(int trustNumAfter) {
+	public void setTrustNumAfter(double trustNumAfter) {
 		this.trustNumAfter = trustNumAfter;
 	}
 

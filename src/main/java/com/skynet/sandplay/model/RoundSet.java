@@ -15,34 +15,42 @@ public class RoundSet extends BaseEntity{
 	 * 保险
 	 */
 	private double insurePrice;
+	private double insurePriceChange;
 	/**
 	 * 银行理财产品
 	 */
 	private double bankPrice;
+	private double bankPriceChange;
 	/**
 	 * 黄金
 	 */
 	private double goldPrice;
+	private double goldPriceChange;
 	/**
 	 * 香港
 	 */
 	private double hkPrice;
+	private double hkPriceChange;
 	/**
 	 * etf
 	 */
 	private double etfPrice;
+	private double etfPriceChange;
 	/**
 	 * 浦发银行
 	 */
 	private double pufaPrice;
+	private double pufaPriceChange;
 	/**
 	 * 信托产品
 	 */
 	private double trustPrice;
+	private double trustPriceChange;
 	/**
 	 * 住宅
 	 */
 	private double housePrice;
+	private double housePriceChange;
 	/**
 	 * 住宅首付
 	 */
@@ -51,6 +59,7 @@ public class RoundSet extends BaseEntity{
 	 * 商业地产
 	 */
 	private double landPrice;
+	private double landPriceChange;
 	/**
 	 * 商业地产首付
 	 */
@@ -190,6 +199,60 @@ public class RoundSet extends BaseEntity{
 	}
 	public void setRentRate(double rentRate) {
 		this.rentRate = rentRate;
+	}
+	public double getInsurePriceChange() {
+		return insurePriceChange;
+	}
+	public void setInsurePriceChange(double insurePriceChange) {
+		this.insurePriceChange = insurePriceChange;
+	}
+	public double getBankPriceChange() {
+		return bankPriceChange;
+	}
+	public void setBankPriceChange(double bankPriceChange) {
+		this.bankPriceChange = bankPriceChange;
+	}
+	public double getGoldPriceChange() {
+		return goldPriceChange;
+	}
+	public void setGoldPriceChange(double goldPriceChange) {
+		this.goldPriceChange = goldPriceChange;
+	}
+	public double getHkPriceChange() {
+		return hkPriceChange;
+	}
+	public void setHkPriceChange(double hkPriceChange) {
+		this.hkPriceChange = hkPriceChange;
+	}
+	public double getEtfPriceChange() {
+		return etfPriceChange;
+	}
+	public void setEtfPriceChange(double etfPriceChange) {
+		this.etfPriceChange = etfPriceChange;
+	}
+	public double getPufaPriceChange() {
+		return pufaPriceChange;
+	}
+	public void setPufaPriceChange(double pufaPriceChange) {
+		this.pufaPriceChange = pufaPriceChange;
+	}
+	public double getTrustPriceChange() {
+		return trustPriceChange;
+	}
+	public void setTrustPriceChange(double trustPriceChange) {
+		this.trustPriceChange = trustPriceChange;
+	}
+	public double getHousePriceChange() {
+		return housePriceChange;
+	}
+	public void setHousePriceChange(double housePriceChange) {
+		this.housePriceChange = housePriceChange;
+	}
+	public double getLandPriceChange() {
+		return landPriceChange;
+	}
+	public void setLandPriceChange(double landPriceChange) {
+		this.landPriceChange = landPriceChange;
 	}
 	
 }

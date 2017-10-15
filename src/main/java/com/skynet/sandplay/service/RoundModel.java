@@ -44,7 +44,7 @@ public class RoundModel {
 		}
 		
 		//家庭收入结余：本轮是否失业
-		round.setSurplus(roundSet.isLostJob() ? 0:20);
+		round.setSurplus(roundSet.isLostJob() ? -12:20);
 		
 		//注入基础信息
 		setRoundBase();

@@ -103,6 +103,10 @@ public class UserActionCtroller extends ActionCtroller{
 			if(oldRound == null) {
 				return retFail("无法获取上一轮数据");
 			}
+			Round existRound = roundService.getRoundByRound(msg.userId, req.getRound());
+			if(existRound != null && existRound.getStatus() == 1) {
+				return retFail("当前轮已被锁定，无法更改");
+			}
 		} 
 		
 		RoundSet roundSet = roundSetService.getRoundSetByRound(req.getRound());

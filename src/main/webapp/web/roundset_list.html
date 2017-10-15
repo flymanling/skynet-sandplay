@@ -40,6 +40,7 @@
 			<th>信托价格</th>
 			<th>住宅价格</th>
 			<th>商业地产价格</th>
+			<th>理财产品利率</th>
 			<th>住宅贷款利率</th>
 			<th>商业地产贷款利率</th>
 			<th>信用贷款利率</th>
@@ -79,7 +80,7 @@
 		     	  		var table = $("#list");
 		     	  		var rows = "";
 		     	  		var heads = ["round", "insurePrice", "bankPrice", "goldPrice", "hkPrice", "etfPrice",
-		     	  		             "pufaPrice","trustPrice","house","land","houseRate","landRate","creditRate","lostJob"];
+		     	  		             "pufaPrice","trustPrice","house","land", "bankRate", "houseRate","landRate","creditRate","lostJob"];
 		       			rsp.data.forEach(function(roundSet){
 		       				var row = "<tr>";
 		       				for(var i=0;i<heads.length;i++) {
