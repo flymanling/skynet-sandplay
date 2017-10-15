@@ -1,0 +1,172 @@
+body{
+			background:#F0FFFF;
+		}
+		#mainContent{
+			clear:both;
+			/*background:#F0FFFF;*/
+			margin-left:20px;
+		}
+		#roundTab { 
+			font:12px verdana, arial, sans-serif; /* 设置文字大小和字体样式 */
+		}
+		
+		#roundTab li{
+			border-radius:3px;
+		}
+		
+		#roundTab li {
+			list-style:none; /* 将默认的列表符号去掉 */
+			padding:10px; /* 将默认的内边距去掉 */
+			margin:10px; /* 将默认的外边距去掉 */
+			float:left; /* 往左浮动 */
+			cursor:pointer;
+			text-decoration: none;
+		}
+		#roundTab li:hover {
+			text-decoration: none;
+		}
+		#myTabContent {
+		}
+		#roundContent table{
+			
+		}
+		#roundContent div{
+			padding:10px;
+		}
+		
+		.direct img{
+			width:50px;
+			height:30px;
+			position:absolute;
+			margin-left:600px;
+			margin-top:180px;
+		}
+		#roundContent table{
+			align:center;
+			font-size:7px;
+			border-radius:3px;
+		}
+		.table1{
+			position:absolute;	
+		}
+		.table1 table{
+			width:580px;
+			height:400px;
+			text-align:center;
+			background-color:#F5FFFA;
+			
+		}
+		
+		.table1 tr {
+		}
+		
+		.table1 td {
+		}
+		
+		table .head{
+			background-color:#E0FFFF;
+			font-size:10px;
+			font-weight:bold;
+		}
+		
+		table .title{
+			background-color:#E0FFFF;
+			font-size:15px;
+			font-weight:bold;
+		}
+		
+		table .title2{
+			background-color:#F5FFFA;
+			font-size:12px;
+			font-weight:bold;
+		}
+		
+		.table2 {
+			position:absolute;	
+			margin-top:380px;
+		}
+		.table2 table{
+			width:1190px;
+		/*	background-color:#76EEC6;*/
+			text-align:center;
+			background-color:#F5FFFA;
+		}
+		
+		
+		input[type="button"] {
+			width:60px;
+			height:28px;
+			border-radius:3px;  
+			 -webkit-border-radius: 4px;
+			background-color:#8FBC8F;
+			font-size:15px;
+		}
+		
+		.table3 {
+			position:absolute;	
+			margin-left:660px;
+			margin-top:-20px;
+		}
+		.table3 table{
+			width:530px;
+			height:400px;
+			text-align:center;
+			background-color:#F5FFFA;
+			border-style: dashed;
+			border-width:2px;
+		}
+		
+		.table3 td{
+			border-style: dashed;
+			border-width:1px;
+		}
+		
+		input[type="text"]{
+			border-radius:3px;
+			-webkit-border-radius: 4px;
+		}
+		#roundContent table input[type="text"]{
+			width:90%;
+		}
+		#roundContent table td{
+		}
+		.home{
+			background:#9BCD9B;
+			padding:10px;
+		}
+		.selected{
+			background:#8DB6CD;
+			padding:10px;
+		}
+		.user{
+			background:#8FBC8F;
+		}
+		.cashStyle {
+			font-size:12px;
+			font-weight:bold;
+		}
+		
+		#gameDesc {
+			background:#B4CDCD;
+			padding:20px;
+			width:62%;
+			border-bottom-left-radius:8px;
+			border-bottom-right-radius:8px;
+		}
+		
+		#gameDesc li{
+			padding:10px;
+		}
+		
+		.nameContent {
+			background:#9BCD9B;
+			padding:20px;
+			width:62%;
+			border-top-left-radius:8px;
+			border-top-right-radius:8px;
+		}
+		
+		#userName {
+			font-size:35px;
+			padding:10px;
+		}
