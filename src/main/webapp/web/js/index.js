@@ -40,7 +40,7 @@ function checkUser(){
 //初始化菜单栏
 function loadMenu() {
 	var btnList = '<li class="selected" id="home"><a onclick="showIndex()">沙盘游戏</a></li>';
-	for(var i=1;i<=10;i++) {
+	for(var i=1;i<=11;i++) {
 		var btn = '<li id="r'+i+'"><a onclick="checkRound('+i+')">第'+i+'轮</a></li>';
 		btnList += btn;
 	}
@@ -51,7 +51,7 @@ function loadMenu() {
 		"<div class=\"table2\"></div>";
 	
 	var roundContent = "";
-	for(var i=1;i<=10;i++) {
+	for(var i=1;i<=11;i++) {
 		roundContent+="<div class=\"roundDiv\" round=\""+i+"\" style=\"display:none;\">" + roundDivContent + "</div>";
 	}
 	$("#roundContent").html(roundContent);
@@ -66,6 +66,7 @@ function showIndex() {
 
 //轮次点击事件
 function checkRound(r) {
+	$('#myTabContent').hide();
 	$("#roundContent").show();
 
 	//原来的div
@@ -105,6 +106,7 @@ function checkRound(r) {
 			function(rsp){
 				if(rsp.status==3) {
 					alert(rsp.msg);
+					roundDiv.removeAttr('current');//下次可以重新加载
 					return;
 				}
 	       		if(rsp.data.currentRound >= r) {
@@ -134,13 +136,13 @@ function checkRound(r) {
 	       							} else {
 	       								color = 'green';
 	       							}
-	       							var changeFont = '<font color="'+color+'">' + (priceChange*100) + '%</font>';
+	       							var changeFont = '<font color="'+color+'">' + (priceChange*100).toFixed(1) + '%</font>';
 	       							table1.find('.'+p).html(changeFont);
 	       						} else {
 	       							table1.find('.'+p).html(roundSet[p]);
 	       						}
 	       						//显示利率
-	       						table2.find('.'+p).html(roundSet[p]*100+'%');
+	       						table2.find('.'+p).html((roundSet[p]*100).toFixed(1)+'%');
 	       						//显示单价
 	       						table3.find('.'+p).html(roundSet[p]);
 	       					}
@@ -151,37 +153,62 @@ function checkRound(r) {
 	       				table3.find('.landPrice').html(roundSet['landPrice']+' | '+roundSet['landPayPrice']);
 	       			}
 	       			
-	       			//显示上一轮配置
-	       			if(rsp.data.round != null) {
-	       				round = rsp.data.round;
-	       				for(var p in round) {
-	       					if(typeof(round[p]) != "function") {
-//			       				console.log(p + ":" + round[p]);
-	       						table1.find('.'+p).html(round[p]);
-	       						table2.find('.'+p).html(round[p]);
+	       			//显示期初数据
+	       			if(rsp.data.roundStart != null) {
+	       				roundStart = rsp.data.roundStart;
+	       				for(var p in roundStart) {
+	       					console.log(p);
+	       					console.log(parseFloat(roundStart[p]).toString());
+	       					if(typeof(roundStart[p]) != "function") {
+	       						var value = 0;
+	       						if(roundStart[p] != undefined && 
+	       								parseFloat(roundStart[p]).toString() != "NaN" &&
+	       								roundStart[p] != 0) {
+	       							value = parseFloat(roundStart[p]).toFixed(2);
+	       							
+	       						}
+	       						table1.find('.'+p).html(value);
 	       					}
 	       				}
 	       				//显示期初现金
-	       				table2.find('.old_cash').html(round['cashAfter']);
-	       				table2.find('.surplus').html(round['surplus']);
-	       				//银行授信额度上限
-   						var bankLimit = round['netAssetAfter']*0.1;
+	       				table2.find('.cashStart').html(roundStart['cash']);
+	       				table2.find('.surplus').html(roundStart['surplus']);
+	       				var bankLimit = roundStart['netAsset']*0.1;
    						if(bankLimit > 100) {
    							bankLimit = 100;
    						}
-   						table2.find('.bankLimit').html(bankLimit);
-   						table2.find('.deptToAsset').html(round['deptToAsset']*100 + '%');
+   						console.log('banklimit:' + bankLimit);
+   						table2.find('.bankLimit').html(bankLimit.toFixed(2));
+	       				
+   						table2.find('.rentStart').html(roundStart['rent'].toFixed(2));
+   						table2.find('.deptToAsset').html((roundStart['deptToAsset']*100).toFixed(2) + '%');
 	       			}
-	       			if(rsp.data.roundNow != null) {
-		       			var roundNow = rsp.data.roundNow;
-		       			for(var p in roundNow) {
-	       					if(typeof(roundNow[p]) != "function") {
-	       						table2.find('.'+p).val(roundNow[p]);
-	       						table3.find('.'+p).html(roundNow[p]);
+	       			//显示期末数据
+	       			if(rsp.data.roundEnd != null) {
+		       			var roundEnd = rsp.data.roundEnd;
+		       			for(var p in roundEnd) {
+	       					if(typeof(roundEnd[p]) != "function") {
+	       						if(roundEnd.id>0) {
+	       							table2.find('.'+p).val(roundEnd[p]);
+	       						}
+	       						table2.find('.'+p).html(roundEnd[p]);
+	       						table2.find('.'+p).val(roundEnd[p]);
+	       						table3.find('.'+p).html(roundEnd[p]);
+//	       						if(p.indexOf('Interest') >= 0) {
+//	       							console.log(p);
+//	       							table1.find('.'+p).html(roundEnd[p]);
+//	       						}
 	       					}
 	       				}
-		       			table2.find('.deptToAsset').html(roundNow['deptToAsset']*100 + '%');
-		       			if(rsp.data.roundNow.status==1) {
+		       		//银行授信额度上限
+   						var bankLimit = roundEnd['netAsset']*0.1;
+   						if(bankLimit > 100) {
+   							bankLimit = 100;
+   						}
+   						console.log('banklimit:' + bankLimit);
+   						table2.find('.bankLimit').html(bankLimit);
+		       			table2.find('.deptToAsset').html((roundEnd['deptToAsset']*100).toFixed(2) + '%');
+		       			if(rsp.data.roundEnd.status==1) {
 		       				$("#submitRound").hide();
 			       			$('#unlock').show();
 			       			table2.find('input[type="text"]').attr("disabled","disabled");
@@ -242,9 +269,9 @@ function isInteger(obj) {
 	}
 
 
-function fromToJson(form) {  
+function fromToJson(roundDiv,form) {  
     var result = {};  
-    var fieldArray = $('#' + form).serializeArray();  
+    var fieldArray = roundDiv.find('.' + form).serializeArray();  
     for (var i = 0; i < fieldArray.length; i++) {  
         var field = fieldArray[i];  
         if (field.name in result) {  
@@ -259,10 +286,10 @@ function fromToJson(form) {
 }  
 
 function view() {
-	var formData = fromToJson("changeForm");
 //	var r = $('#roundStep').val();
 	var roundDiv = $('.roundDiv[current=1]');
-	var roundDiv = roundDiv.attr('round');
+	var formData = fromToJson(roundDiv,"changeForm");
+	var r = roundDiv.attr('round');
 	var table1 = roundDiv.children('.table1');
 	var table2 = roundDiv.children('.table2');
 	var table3 = roundDiv.children('.table3');
@@ -284,15 +311,30 @@ function view() {
 			}
 	       		if(rsp.status==1) {
 	       			if(rsp.data != null) {
-	       				round = rsp.data;
-	       				for(var p in round) {
-	       					if(typeof(round[p]) != "function") {
-//			       				console.log(p + ":" + round[p]);
-	       						table3.find('.'+p).html(round[p]);
-	       						table2.find('span.'+p).html(round[p]);
+	       				var roundEnd = rsp.data;
+	       				console.log(roundEnd);
+	       				for(var p in roundEnd) {
+	       					if(typeof(roundEnd[p]) != "function") {
+	       						if(p=='bankLimit') {
+	       							continue;
+	       						}
+	       						var value = 0;
+	       						if(roundEnd[p] != undefined && 
+	       								parseFloat(roundStart[p]).toString() != "NaN" &&
+	       								roundEnd[p] != 0) {
+	       							value = parseFloat(roundEnd[p]).toFixed(2);
+	       							
+	       						}
+//			       				console.log(p + "--:" + roundEnd[p]);
+	       						table3.find('.'+p).html(value);
+	       						table2.find('span.'+p).html(value);
 	       					}
 	       				}
-	       				table2.find('.deptToAsset').html(round['deptToAsset']*100 + '%');
+	       				//显示期初现金
+	       				table2.find('.cash').html(roundEnd['cash'].toFixed(2));
+	       				table2.find('.surplus').html(roundEnd['surplus']);
+	       				table2.find('.deptToAsset').html((roundEnd['deptToAsset']*100).toFixed(2) + '%');
+	       				table3.find('.netAsset').html(roundEnd['netAsset'].toFixed(2));
 	       			}
 	       		} 
 	    },"json");
@@ -303,9 +345,9 @@ function submitRound() {
 	if(!window.confirm('确定提交吗？')) {
 		return;
 	}
-	var formData = fromToJson("changeForm");
 	
 	var roundDiv = $('.roundDiv[current=1]');
+	var formData = fromToJson(roundDiv,"changeForm");
 	var r = roundDiv.attr('round');
 	var table1 = roundDiv.children('.table1');
 	var table2 = roundDiv.children('.table2');

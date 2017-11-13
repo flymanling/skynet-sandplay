@@ -3,9 +3,9 @@
 <head>
 	<meta charset="utf-8"> 
 	<title>价格利率列表</title>
-	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">  
-	<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
-	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
 	
 	<style type="text/css">
 		table{
@@ -40,11 +40,13 @@
 			<th>信托价格</th>
 			<th>住宅价格</th>
 			<th>商业地产价格</th>
+			<th>商业地产租金</th>
 			<th>理财产品利率</th>
 			<th>住宅贷款利率</th>
 			<th>商业地产贷款利率</th>
 			<th>信用贷款利率</th>
 			<th>是否失业</th>
+			<th>是否重疾</th>
 			<th>操作</th>
 			
 		</tr>
@@ -80,7 +82,7 @@
 		     	  		var table = $("#list");
 		     	  		var rows = "";
 		     	  		var heads = ["round", "insurePrice", "bankPrice", "goldPrice", "hkPrice", "etfPrice",
-		     	  		             "pufaPrice","trustPrice","house","land", "bankRate", "houseRate","landRate","creditRate","lostJob"];
+		     	  		             "pufaPrice","trustPrice","house","land", "landRent", "bankRate", "houseRate","landRate","creditRate","lostJob","sick"];
 		       			rsp.data.forEach(function(roundSet){
 		       				var row = "<tr>";
 		       				for(var i=0;i<heads.length;i++) {
@@ -89,7 +91,9 @@
 		       						row += "<td>" + roundSet[p+'Price'] + " | " + roundSet[p+'PayPrice'] + "</td>";
 		       					} else if(p=='lostJob') {
 		       						row += "<td>" + (roundSet[p]?"是":"否") + "</td>";
-		       					} else {
+		       					} else if(p=='sick'){
+		       						row += "<td>" + (roundSet[p]?"是":"否") + "</td>";
+		       					}else {
 			       					row += "<td>" + roundSet[p] + "</td>";
 		       					}
 		       				}
@@ -115,13 +119,14 @@
 			win.onload = function() {
 				for(var p in roundData) {
 					if(typeof(p) != 'function') {
-						if(roundData[p]==true || roundData[p]==false) {
+						if(typeof(roundData[p]) == 'boolean') {
+							console.log(p);
 							$(win.document).find('input[name="'+p+'"][value="'+roundData[p]+'"]').attr('checked',"checked");
 						} else {
 							$(win.document).find('input[name="'+p+'"]').val(roundData[p]);
-						}
-							
+						} 
 					}
+					
 				}
 			}
 		});

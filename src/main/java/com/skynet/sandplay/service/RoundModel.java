@@ -2,10 +2,12 @@ package com.skynet.sandplay.service;
 
 import com.skynet.sandplay.form.BaseMsg;
 import com.skynet.sandplay.form.RoundForm;
-import com.skynet.sandplay.model.Round;
+import com.skynet.sandplay.model.RoundEnd;
 import com.skynet.sandplay.model.RoundPlay;
 import com.skynet.sandplay.model.RoundSet;
+import com.skynet.sandplay.model.RoundStart;
 import com.skynet.sandplay.service.interfaces.ILoanService;
+import com.skynet.sandplay.util.NumUtil;
 
 /**
  * 每轮数据计算模型
@@ -14,8 +16,9 @@ import com.skynet.sandplay.service.interfaces.ILoanService;
  */
 public class RoundModel {
 
-	private Round round;//本轮数据
-	private Round oldRound;//上轮数据
+	private RoundStart nextRoundStart;//下轮期初数据
+	private RoundEnd roundEnd;//本轮期末数据
+	private RoundStart roundStart;//本轮期初数据
 	private RoundSet roundSet;//本轮价格
 	private RoundSet nextRoundSet;//下轮价格
 	private RoundForm req;//用户提交数据
@@ -24,11 +27,12 @@ public class RoundModel {
 	private LoanCash loanCash = new LoanCash();
 	StringBuffer errMsg = new StringBuffer();
 	
-	public RoundModel(Round round, Round oldRound, 
+	public RoundModel(RoundStart roundStart, RoundEnd roundEnd, RoundStart nextRoundStart,
 			RoundSet roundSet, RoundSet nextRoundSet, 
 			RoundForm req, BaseMsg msg, ILoanService loanService) {
-		this.round = round;
-		this.oldRound = oldRound;
+		this.roundStart = roundStart;
+		this.roundEnd = roundEnd;
+		this.nextRoundStart = nextRoundStart;
 		this.roundSet = roundSet;
 		this.nextRoundSet = nextRoundSet;
 		this.req = req;
@@ -44,7 +48,7 @@ public class RoundModel {
 		}
 		
 		//家庭收入结余：本轮是否失业
-		round.setSurplus(roundSet.isLostJob() ? -12:20);
+		nextRoundStart.setSurplus(roundSet.isLostJob() ? -12:20);
 		
 		//注入基础信息
 		setRoundBase();
@@ -58,15 +62,13 @@ public class RoundModel {
 		//记录资产配置数量
 		setRoundNum();
 		
-		//计算配置后总值
-		setRoundValueAfter();
-		
-		
 		//计算贷款(要放在现金、资产、负债前计算)
-		loanService.handleRoundLoan(round, oldRound, req, roundSet, loanCash);
+		loanService.handleRoundLoan(roundStart, roundEnd, nextRoundStart, req, roundSet, loanCash);
 
 		//计算利息支出
-		setRoundInterest();
+//		if(req.getView() == 0) {
+			setRoundInterest();
+//		}
 		
 		//计算现金
 		setRoundCash();
@@ -75,16 +77,17 @@ public class RoundModel {
 		setRoundAsset();
 		
 		//计算总负债
-		double debt = round.getCreditLoan() + round.getHouseLoan() + round.getLandLoan();
-		round.setTotalDebt(debt);
+		double debt = roundEnd.getCreditLoan() + roundEnd.getHouseLoan() + roundEnd.getLandLoan();
+		roundEnd.setTotalDebt(debt);
+		
 		
 		//计算净资产
-		double netAsset = round.getTotalAsset() - debt;
-		round.setNetAsset(netAsset);
-		double netAssetAfter = round.getTotalAssetAfter() - debt;
-		round.setNetAssetAfter(netAssetAfter);
+		double netAsset = roundEnd.getTotalAsset() - debt;
+		roundEnd.setNetAsset(netAsset);
 		
-		round.setDeptToAsset(round.getNetAssetAfter()/round.getTotalAssetAfter());
+		roundEnd.setDeptToAsset(roundEnd.getNetAsset()/roundEnd.getTotalAsset());
+		
+		setNextRound();
 		
 		checkAfter();
 		
@@ -92,12 +95,12 @@ public class RoundModel {
 	}
 	
 	private boolean checkForm() {
-		double bankLimit = oldRound.getNetAssetAfter() * 0.1;
+		double bankLimit = roundStart.getNetAsset() * 0.1;
 		if(bankLimit > 100) {
 			bankLimit = 100;
 		}
 		if(req.getCreditLoanChange() != null) {
-			if((req.getCreditLoanChange() + oldRound.getCreditLoan()) > bankLimit) {
+			if((req.getCreditLoanChange() + roundStart.getCreditLoan()) > bankLimit) {
 				errMsg.append("你已超出银行授信额度，当前额度为：" + bankLimit);
 				return false;
 			}
@@ -109,8 +112,8 @@ public class RoundModel {
 	 */
 	private void checkAfter() {
 		//净总比
-		if(round.getDeptToAsset() < 0.5) {
-			errMsg.append("净总比不能小于50%，当前配置净总比：" + (round.getDeptToAsset()*100 + "%"));
+		if(roundEnd.getDeptToAsset() < 0.5) {
+			errMsg.append("净总比不能小于50%，当前配置净总比：" + (roundEnd.getDeptToAsset()*100 + "%"));
 		}
 		
 	}
@@ -119,34 +122,18 @@ public class RoundModel {
 	 * 计算资产
 	 */
 	private void setRoundAsset() {
-		double asset = round.getCash()
-				+ round.getInsure() 
-				+ round.getBank()
-				+ round.getGold()
-				+ round.getHk()
-				+ round.getEtf()
-				+ round.getPufa()
-				+ round.getTrust()
-				+ round.getHouse()
-				+ round.getLand()
-				+ (roundSet.isLostJob()?0:20);
+		double asset = roundEnd.getCash()
+				+ roundEnd.getInsure() 
+				+ roundEnd.getBank()
+				+ roundEnd.getGold()
+				+ roundEnd.getHk()
+				+ roundEnd.getEtf()
+				+ roundEnd.getPufa()
+				+ roundEnd.getTrust()
+				+ roundEnd.getHouse()
+				+ roundEnd.getLand();
 		
-		round.setTotalAsset(asset);
-		
-		//计算总资产
-		double assetAfter = round.getCashAfter() 
-				+ round.getInsureAfter() 
-				+ round.getBankAfter()
-				+ round.getGoldAfter()
-				+ round.getHkAfter()
-				+ round.getEtfAfter()
-				+ round.getPufaAfter()
-				+ round.getTrustAfter()
-				+ round.getHouseAfter()
-				+ round.getLandAfter()
-				+ (nextRoundSet.isLostJob() ? 0:20)
-				;
-		round.setTotalAssetAfter(assetAfter);
+		roundEnd.setTotalAsset(asset);
 	}
 	
 	/**
@@ -154,7 +141,7 @@ public class RoundModel {
 	 */
 	private void setRoundCash() {
 		//计算其他资产的总值
-		double newCashNow = oldRound.getCashAfter();
+		double newCashNow = roundStart.getCash();
 		
 		//现金余额计算：把所有的买入卖出统计
 //		newCashNow += round.getSurplus();
@@ -187,46 +174,28 @@ public class RoundModel {
 		//信用贷款新增
 		newCashNow += req.getCreditLoanChange() != null?req.getCreditLoanChange():0;
 
-		round.setCashChange(newCashNow - oldRound.getCashAfter());
-		round.setCash(newCashNow);
+		roundEnd.setCashChange(newCashNow - roundStart.getCash());
+		roundEnd.setCash(newCashNow);
 		
-		double newCash = newCashNow;
 		
-		newCash += nextRoundSet.isLostJob()?0:20;
-		
-		//住宅利息支出
-		newCash -= round.getHouseInterestAfter();
-		//商业用地利息支出
-		newCash -= round.getLandInterestAfter();
-		//信用贷款利息支出
-		newCash -= round.getCreditLoanInterestAfter();
-		//商业地产租金收入
-		newCash += round.getRent();
-		
-		round.setCashAfter(newCash);
 	}
 	
 	/**
 	/信用贷款利息支出：信用贷款*信用贷款利率
 	**/
 	private void setRoundInterest() {
-		round.setCreditLoanInterest(oldRound.getCreditLoanInterestAfter());
-		double creditLoanInterest = round.getCreditLoan()*roundSet.getCreditRate();
-		round.setCreditLoanInterestAfter(creditLoanInterest);
-		round.setCreditLoanInterestSurplus(round.getCreditLoanInterestAfter() + creditLoanInterest);
+		roundEnd.setCreditInterest(NumUtil.getDoubleFormat(roundEnd.getCreditLoan()*nextRoundSet.getCreditRate()));
+		roundEnd.setCreditLoanInterestSurplus(roundStart.getCreditLoanInterestSurplus() + roundEnd.getCreditInterest());
 		
 		//房贷利息支出：房贷*房贷利率
-		round.setHouseInterest(oldRound.getHouseInterestAfter());
-		double houseInterest = round.getHouseLoan()*roundSet.getHouseRate();
-		round.setHouseInterestAfter(houseInterest);
-		round.setHouseInterestSurplus(round.getHouseInterestAfter() + houseInterest);
+		roundEnd.setHouseInterest(NumUtil.getDoubleFormat(roundEnd.getHouseLoan()*nextRoundSet.getHouseRate()));
+		roundEnd.setHouseInterestSurplus(roundStart.getHouseInterestSurplus() + roundEnd.getHouseInterest());
 		
-		round.setLandInterest(oldRound.getLandInterestAfter());
-		double landInterest = round.getLandLoan()*roundSet.getLandRate();
-		round.setLandInterestAfter(landInterest);
-		round.setLandInterestSurplus(round.getLandInterestAfter() + landInterest);
+		roundEnd.setLandInterest(NumUtil.getDoubleFormat(roundEnd.getLandLoan()*nextRoundSet.getLandRate()));
+		roundEnd.setLandInterestSurplus(roundStart.getLandInterestSurplus() + roundEnd.getLandInterest());
 		
-		round.setRent(round.getLand()*roundSet.getRentRate());
+		roundEnd.setRent(roundStart.getRent());
+		
 		
 	}
 	
@@ -234,99 +203,171 @@ public class RoundModel {
 	 * 初始化基本信息
 	 */
 	private void setRoundBase() {
-		round.setUserId(msg.userId);
-		round.setUserName(msg.userName);
-		round.setRound(req.getRound());
-		round.setStatus(1);//锁定
-		round.setGrade(RoundPlay.currentGrade);
+		roundEnd.setUserId(msg.userId);
+		roundEnd.setUserName(msg.userName);
+		roundEnd.setRound(req.getRound());
+		roundEnd.setStatus(1);//锁定
+		roundEnd.setGrade(RoundPlay.currentGrade);
+		
+		nextRoundStart.setUserId(msg.userId);
+		nextRoundStart.setUserName(msg.userName);
+		nextRoundStart.setRound(req.getRound() + 1);
+		nextRoundStart.setGrade(RoundPlay.currentGrade);
 	}
 	
 	/**
 	 * 通过流入流出计算当前各项流动资产的总值
 	 */
 	private void setRoundValue() {
-		round.setInsure(oldRound.getInsureAfter() + (req.getInsureChange() != null?req.getInsureChange():0));
-		round.setBank(oldRound.getBankAfter() + (req.getBankChange() != null?req.getBankChange():0));
-		round.setGold(oldRound.getGoldAfter() + (req.getGoldChange() != null?req.getGoldChange():0));
-		round.setHk(oldRound.getHkAfter() + (req.getHkChange()!=null?req.getHkChange():0));
-		round.setEtf(oldRound.getEtfAfter() + (req.getEtfChange()!=null?req.getEtfChange():0));
-		round.setPufa(oldRound.getPufaAfter() + (req.getPufaChange()!=null?req.getPufaChange():0));
-		round.setTrust(oldRound.getTrustAfter() + (req.getTrustChange()!=null?req.getTrustChange():0));
+		roundEnd.setInsure(roundStart.getInsure() + (req.getInsureChange() != null?req.getInsureChange():0));
+		roundEnd.setBank(roundStart.getBank() + (req.getBankChange() != null?req.getBankChange():0));
+		roundEnd.setGold(roundStart.getGold() + (req.getGoldChange() != null?req.getGoldChange():0));
+		roundEnd.setHk(roundStart.getHk() + (req.getHkChange()!=null?req.getHkChange():0));
+		roundEnd.setEtf(roundStart.getEtf() + (req.getEtfChange()!=null?req.getEtfChange():0));
+		roundEnd.setPufa(roundStart.getPufa() + (req.getPufaChange()!=null?req.getPufaChange():0));
+		roundEnd.setTrust(roundStart.getTrust() + (req.getTrustChange()!=null?req.getTrustChange():0));
 		//信用贷款
-		round.setCreditLoan(oldRound.getCreditLoan() + (req.getCreditLoanChange() != null?req.getCreditLoanChange():0));
+		roundEnd.setCreditLoan(roundStart.getCreditLoan() + (req.getCreditLoanChange() != null?req.getCreditLoanChange():0));
 		
 		//通过流动的首付款计算固定资产总值，要注意卖出的时候要还清贷款
 		//变动的数量
 		double houseChange = (int) (req.getHouseChange()!=null?req.getHouseChange()*roundSet.getHousePrice():0);
 		double landChange = (int) (req.getLandChange()!=null?req.getLandChange()*roundSet.getLandPrice():0);
 		//计算总值
-		round.setHouse(oldRound.getHouseAfter() + houseChange);
-		round.setLand(oldRound.getLandAfter() + landChange);
-	}
-	
-	private void setRoundValueAfter() {
-		if(nextRoundSet != null) {
-			//计算下一轮变动后的总值
-			round.setInsureAfter(round.getInsureNumAfter() * nextRoundSet.getInsurePrice());
-			round.setBankAfter(round.getBankNumAfter() * nextRoundSet.getBankPrice());
-			round.setGoldAfter(round.getGoldNumAfter() * nextRoundSet.getGoldPrice());
-			round.setHkAfter(round.getHkNumAfter() * nextRoundSet.getHkPrice());
-			round.setEtfAfter(round.getEtfNumAfter() * nextRoundSet.getEtfPrice());
-			round.setPufaAfter(round.getPufaNumAfter() * nextRoundSet.getPufaPrice());
-			round.setTrustAfter(round.getTrustNumAfter() * nextRoundSet.getTrustPrice());
-			round.setHouseAfter(round.getHouseNumAfter() * nextRoundSet.getHousePrice());
-			round.setLandAfter(round.getLandNumAfter() * nextRoundSet.getLandPrice());
-		} else {
-			//如果没有设置下一轮的价格，就取本轮数据
-			round.setInsureAfter(round.getInsure());
-			round.setBankAfter(round.getBank());
-			round.setGoldAfter(round.getGold());
-			round.setHkAfter(round.getHk());
-			round.setEtfAfter(round.getEtf());
-			round.setPufaAfter(round.getPufa());
-			round.setTrustAfter(round.getTrust());
-			round.setHouseAfter(round.getHouse());
-			round.setLandAfter(round.getLand());
-		}
+		roundEnd.setHouse(roundStart.getHouse() + houseChange);
+		roundEnd.setLand(roundStart.getLand() + landChange);
 	}
 	
 	/**
 	 * 计算各项资产的数量
 	 */
 	private void setRoundNum() {
-		round.setInsureNum(oldRound.getInsureNumAfter());
-		round.setBankNum(oldRound.getBankNumAfter());
-		round.setGoldNum(oldRound.getGoldNumAfter());
-		round.setHkNum(oldRound.getHkNumAfter());
-		round.setEtfNum(oldRound.getEtfNumAfter());
-		round.setPufaNum(oldRound.getPufaNumAfter());
-		round.setTrustNum(oldRound.getTrustNumAfter());
-		round.setHouseNum(oldRound.getHouseNumAfter());
-		round.setLandNum(oldRound.getLandNumAfter());
-		
-		round.setInsureNumAfter(new Double(round.getInsure()/roundSet.getInsurePrice()).intValue());
-		round.setBankNumAfter(new Double(round.getBank()/roundSet.getBankPrice()).intValue());
-		round.setGoldNumAfter(new Double(round.getGold()/roundSet.getGoldPrice()).intValue());
-		round.setHkNumAfter(new Double(round.getHk()/roundSet.getHkPrice()).intValue());
-		round.setEtfNumAfter(new Double(round.getEtf()/roundSet.getEtfPrice()).intValue());
-		round.setPufaNumAfter(new Double(round.getPufa()/roundSet.getPufaPrice()).intValue());
-		round.setTrustNumAfter(new Double(round.getTrust()/roundSet.getTrustPrice()).intValue());
-		round.setHouseNumAfter(new Double(round.getHouse()/roundSet.getHousePrice()).intValue());
-		round.setLandNumAfter(new Double(round.getLand()/roundSet.getLandPrice()).intValue());
+		roundEnd.setInsureNum(NumUtil.getDoubleFormat(roundEnd.getInsure()/roundSet.getInsurePrice()));
+		roundEnd.setBankNum(NumUtil.getDoubleFormat(roundEnd.getBank()/roundSet.getBankPrice()));
+		roundEnd.setGoldNum(NumUtil.getDoubleFormat(roundEnd.getGold()/roundSet.getGoldPrice()));
+		roundEnd.setHkNum(NumUtil.getDoubleFormat(roundEnd.getHk()/roundSet.getHkPrice()));
+		roundEnd.setEtfNum(NumUtil.getDoubleFormat(roundEnd.getEtf()/roundSet.getEtfPrice()));
+		roundEnd.setPufaNum(NumUtil.getDoubleFormat(roundEnd.getPufa()/roundSet.getPufaPrice()));
+		roundEnd.setTrustNum(NumUtil.getDoubleFormat(roundEnd.getTrust()/roundSet.getTrustPrice()));
+		roundEnd.setHouseNum(new Double(roundEnd.getHouse()/roundSet.getHousePrice()).intValue());
+		roundEnd.setLandNum(new Double(roundEnd.getLand()/roundSet.getLandPrice()).intValue());
 	}
 	
 	/**
 	 * 保存各项资产的流动数据
 	 */
 	private void setRoundChange() {
-		round.setInsureChange(req.getInsureChange() != null?req.getInsureChange():0);
-		round.setBankChange(req.getBankChange() != null?req.getBankChange():0);
-		round.setGoldChange(req.getGoldChange() != null?req.getGoldChange():0);
-		round.setHkChange(req.getHkChange() != null?req.getHkChange():0);
-		round.setEtfChange(req.getEtfChange() != null?req.getEtfChange():0);
-		round.setPufaChange(req.getPufaChange() != null?req.getPufaChange():0);
-		round.setTrustChange(req.getTrustChange() != null?req.getTrustChange():0);
-		round.setHouseChange(req.getHouseChange() != null?req.getHouseChange():0);
-		round.setLandChange(req.getLandChange() != null?req.getLandChange():0);
+		roundEnd.setInsureChange(req.getInsureChange() != null?req.getInsureChange():0);
+		roundEnd.setBankChange(req.getBankChange() != null?req.getBankChange():0);
+		roundEnd.setGoldChange(req.getGoldChange() != null?req.getGoldChange():0);
+		roundEnd.setHkChange(req.getHkChange() != null?req.getHkChange():0);
+		roundEnd.setEtfChange(req.getEtfChange() != null?req.getEtfChange():0);
+		roundEnd.setPufaChange(req.getPufaChange() != null?req.getPufaChange():0);
+		roundEnd.setTrustChange(req.getTrustChange() != null?req.getTrustChange():0);
+		roundEnd.setHouseChange(req.getHouseChange() != null?req.getHouseChange():0);
+		roundEnd.setLandChange(req.getLandChange() != null?req.getLandChange():0);
+		roundEnd.setCreditLoanChange(req.getCreditLoanChange() != null?req.getCreditLoanChange():0);
+	}
+	
+	private void setNextRound() {
+		//数量与上期期末一致
+		nextRoundStart.setInsureNum(roundEnd.getInsureNum());
+		nextRoundStart.setBankNum(roundEnd.getBankNum());
+		nextRoundStart.setGoldNum(roundEnd.getGoldNum());
+		nextRoundStart.setHkNum(roundEnd.getHkNum());
+		nextRoundStart.setEtfNum(roundEnd.getEtfNum());
+		nextRoundStart.setPufaNum(roundEnd.getPufaNum());
+		nextRoundStart.setTrustNum(roundEnd.getTrustNum());
+		nextRoundStart.setHouseNum(roundEnd.getHouseNum());
+		nextRoundStart.setLandNum(roundEnd.getLandNum());
+		
+		//市值根据下一轮价格计算
+		if(nextRoundSet != null) {
+			nextRoundStart.setInsure(nextRoundSet.getInsurePrice()*nextRoundStart.getInsureNum());
+			nextRoundStart.setBank(nextRoundSet.getBankPrice()*nextRoundStart.getBankNum());
+			nextRoundStart.setGold(nextRoundSet.getGoldPrice()*nextRoundStart.getGoldNum());
+			nextRoundStart.setHk(nextRoundSet.getHkPrice()*nextRoundStart.getHkNum());
+			nextRoundStart.setEtf(nextRoundSet.getEtfPrice()*nextRoundStart.getEtfNum());
+			nextRoundStart.setPufa(nextRoundSet.getPufaPrice()*nextRoundStart.getPufaNum());
+			nextRoundStart.setTrust(nextRoundSet.getTrustPrice()*nextRoundStart.getTrustNum());
+			nextRoundStart.setHouse(nextRoundSet.getHousePrice()*nextRoundStart.getHouseNum());
+			nextRoundStart.setLand(nextRoundSet.getLandPrice()*nextRoundStart.getLandNum());
+		}else {
+			//如果没有设置下一轮的价格，就取本轮数据
+			nextRoundStart.setInsure(roundEnd.getInsure());
+			nextRoundStart.setBank(roundEnd.getBank());
+			nextRoundStart.setGold(roundEnd.getGold());
+			nextRoundStart.setHk(roundEnd.getHk());
+			nextRoundStart.setEtf(roundEnd.getEtf());
+			nextRoundStart.setPufa(roundEnd.getPufa());
+			nextRoundStart.setTrust(roundEnd.getTrust());
+			nextRoundStart.setHouse(roundEnd.getHouse());
+			nextRoundStart.setLand(roundEnd.getLand());
+		}
+		
+		nextRoundStart.setHouseInterest(roundEnd.getHouseInterest());
+		nextRoundStart.setLandInterest(roundEnd.getLandInterest());
+		nextRoundStart.setCreditInterest(roundEnd.getCreditInterest());
+		nextRoundStart.setCreditLoanInterestSurplus(roundEnd.getCreditLoanInterestSurplus());
+		nextRoundStart.setHouseInterestSurplus(roundEnd.getHouseInterestSurplus());
+		nextRoundStart.setLandInterestSurplus(roundEnd.getLandInterestSurplus());
+		
+		nextRoundStart.setRent(NumUtil.getDoubleFormat(roundEnd.getLandNum()*nextRoundSet.getLandRent()));
+		
+		
+		double newCash = roundEnd.getCash();
+		
+		
+		
+		//住宅利息支出
+		newCash -= roundEnd.getHouseInterest();
+		//商业用地利息支出
+		newCash -= roundEnd.getLandInterest();
+		//信用贷款利息支出
+		newCash -= roundEnd.getCreditInterest();
+		//商业地产租金收入
+		newCash += roundEnd.getRent();
+		
+		if(nextRoundSet.getSick()) {
+			double sickFee = 80;
+			if(nextRoundStart.getInsure() > 0 && nextRoundStart.getInsure() < 8) {
+				sickFee -= nextRoundStart.getInsure()*10;
+			} else if(nextRoundStart.getInsure() > 8) {
+				sickFee = 0;
+			}
+			nextRoundStart.setInsure(0);
+			newCash -= sickFee;
+			newCash -= 12;//同时失业
+			nextRoundStart.setSurplus(-12);
+		} else {
+			newCash += nextRoundSet.isLostJob()?0:20;
+		}
+		
+		nextRoundStart.setCash(newCash);
+		
+		//总资产，净资产，净总比按照计算后的市值计算
+		//计算总资产
+		double assetAfter = nextRoundStart.getCash() 
+						+ nextRoundStart.getInsure() 
+						+ nextRoundStart.getBank()
+						+ nextRoundStart.getGold()
+						+ nextRoundStart.getHk()
+						+ nextRoundStart.getEtf()
+						+ nextRoundStart.getPufa()
+						+ nextRoundStart.getTrust()
+						+ nextRoundStart.getHouse()
+						+ nextRoundStart.getLand()
+						
+						;
+		nextRoundStart.setTotalAsset(assetAfter);
+		
+		//总负债
+		nextRoundStart.setTotalDebt(roundEnd.getTotalDebt());
+		
+		double netAssetAfter = nextRoundStart.getTotalAsset() - nextRoundStart.getTotalDebt();
+		nextRoundStart.setNetAsset(netAssetAfter);
+		
+		nextRoundStart.setDeptToAsset(nextRoundStart.getNetAsset()/nextRoundStart.getTotalAsset());
+		
 	}
 }

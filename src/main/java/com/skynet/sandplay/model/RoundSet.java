@@ -88,7 +88,9 @@ public class RoundSet extends BaseEntity{
 	/**
 	 * 商业用地租金利率
 	 */
-	private double rentRate;
+	private double landRent;
+	
+	private boolean sick;
 	
 	
 	public double getHousePayPrice() {
@@ -194,12 +196,7 @@ public class RoundSet extends BaseEntity{
 	public void setLostJob(boolean lostJob) {
 		this.lostJob = lostJob;
 	}
-	public double getRentRate() {
-		return rentRate;
-	}
-	public void setRentRate(double rentRate) {
-		this.rentRate = rentRate;
-	}
+	
 	public double getInsurePriceChange() {
 		return insurePriceChange;
 	}
@@ -253,6 +250,18 @@ public class RoundSet extends BaseEntity{
 	}
 	public void setLandPriceChange(double landPriceChange) {
 		this.landPriceChange = landPriceChange;
+	}
+	public double getLandRent() {
+		return landRent;
+	}
+	public void setLandRent(double landRent) {
+		this.landRent = landRent;
+	}
+	public boolean getSick() {
+		return sick;
+	}
+	public void setSick(boolean sick) {
+		this.sick = sick;
 	}
 	
 }

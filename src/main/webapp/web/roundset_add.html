@@ -3,9 +3,9 @@
 <head>
 	<meta charset="utf-8"> 
 	<title>新增设置</title>
-	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">  
-	<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
-	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
 	<script type="text/javascript">
 		var round = null;
 		
@@ -27,7 +27,9 @@
 		        if (field.name in result) {  
 		            result[field.name] += ',' + field.value;  
 		        } else {  
-		            result[field.name] = field.value;  
+		        	if(field.value != null && field.value != '' && field.value != undefined) {
+		        		result[field.name] = field.value;  
+		        	}  
 		        }  
 		    }
 		    return result;  
@@ -35,6 +37,7 @@
 	
 		function addRoundSet() {
 			var content = fromToJson("roundSet");
+			console.log(content);
 			var data = {
 					serviceId:2,
 					actionId:2,
@@ -155,6 +158,14 @@
 			</tr>
 			<tr>
 				<td>
+					<label>商业地产租金</label>
+				</td>
+				<td>
+					<input name="landRent">
+				</td>
+			</tr>
+			<tr>
+				<td>
 					<label>理财产品利率</label>
 				</td>
 				<td>
@@ -186,6 +197,7 @@
 					<input name="creditRate">
 				</td>
 			</tr>
+			
 			<tr>
 				<td>
 					<label>是否失业</label>
@@ -193,6 +205,15 @@
 				<td>
 					<input name="lostJob" type="radio" value="true" > 是
 					<input name="lostJob" type="radio" value="false" > 否
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>是否重疾</label>
+				</td>
+				<td>
+					<input name="sick" type="radio" value="true" > 是
+					<input name="sick" type="radio" value="false" > 否
 				</td>
 			</tr>
 			<tr>

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import com.skynet.sandplay.dao.interfaces.ILoanDao;
 import com.skynet.sandplay.model.Loan;
-import com.skynet.sandplay.model.Round;
 import com.skynet.sandplay.model.RoundPlay;
 
 @Repository("loanDao")

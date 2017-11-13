@@ -11,12 +11,16 @@ import com.skynet.sandplay.annotation.ActionId;
 import com.skynet.sandplay.annotation.ServiceId;
 import com.skynet.sandplay.form.BaseMsg;
 import com.skynet.sandplay.form.RoundForm;
-import com.skynet.sandplay.model.Round;
+import com.skynet.sandplay.model.RoundEnd;
 import com.skynet.sandplay.model.RoundPlay;
 import com.skynet.sandplay.model.RoundSet;
+import com.skynet.sandplay.model.RoundStart;
 import com.skynet.sandplay.model.User;
-import com.skynet.sandplay.service.interfaces.IRoundService;
+import com.skynet.sandplay.service.RoundModel;
+import com.skynet.sandplay.service.interfaces.ILoanService;
+import com.skynet.sandplay.service.interfaces.IRoundEndService;
 import com.skynet.sandplay.service.interfaces.IRoundSetService;
+import com.skynet.sandplay.service.interfaces.IRoundStartService;
 import com.skynet.sandplay.service.interfaces.IUserService;
 import com.skynet.sandplay.util.StringUtil;
 
@@ -26,10 +30,14 @@ public class UserActionCtroller extends ActionCtroller{
 
 	@Resource(name="userService")
 	private IUserService userService;
-	@Resource(name="roundService")
-	private IRoundService roundService;
+	@Resource(name="roundEndService")
+	private IRoundEndService roundEndService;
+	@Resource(name="roundStartService")
+	private IRoundStartService roundStartService;
 	@Resource(name="roundSetService")
 	private IRoundSetService roundSetService;
+	@Resource(name="loanService")
+	private ILoanService loanService;
 	
 	@ActionId(1)
 	public String getUser(BaseMsg msg) {
@@ -51,10 +59,17 @@ public class UserActionCtroller extends ActionCtroller{
 		Map<String, Object> map = new HashMap<String, Object>();
 		RoundSet roundSet = roundSetService.getRoundSetByRound(round);
 		RoundSet oldRoundSet = roundSetService.getRoundSetByRound(round-1);
-		Round roundData = roundService.getRoundByRound(msg.userId, round>1?round-1:0);
-		Round roundNow = roundService.getRoundByRound(msg.userId, round);
-		map.put("round", roundData == null?new Round():roundData);
-		map.put("roundNow", roundNow);
+		RoundStart roundStart = roundStartService.getRoundStartByRound(msg.userId, round);
+		if(roundStart == null) {
+			roundStart = new RoundStart();
+		}
+		RoundEnd roundEnd = roundEndService.getRoundEndByRound(msg.userId, round);
+		if(roundEnd == null) {
+			//roundEnd = new RoundEnd();
+			//roundEnd.setCash(roundStart.getCash() + roundStart.getSurplus());
+		}
+		map.put("roundStart", roundStart);
+		map.put("roundEnd", roundEnd);
 		map.put("roundSet", roundSet);
 		map.put("oldRoundSet", oldRoundSet);
 		map.put("currentRound", RoundPlay.currentRound);
@@ -97,14 +112,17 @@ public class UserActionCtroller extends ActionCtroller{
 	@ActionId(6)
 	public String saveRound(BaseMsg msg) {
 		RoundForm req = gson.fromJson(msg.content, RoundForm.class);
-		Round oldRound = new Round();
+		RoundStart roundStart = new RoundStart();
+		roundStart.setUserId(msg.userId);
+		roundStart.setRound(1);
+		roundStart.setUserName(msg.userName);
 		if(req.getRound() > 1) {
-			oldRound = roundService.getRoundByRound(msg.userId, req.getRound()-1);
-			if(oldRound == null) {
-				return retFail("无法获取上一轮数据");
+			roundStart = roundStartService.getRoundStartByRound(msg.userId, req.getRound());
+			if(roundStart == null) {
+				return retFail("无法获取本轮期初数据");
 			}
-			Round existRound = roundService.getRoundByRound(msg.userId, req.getRound());
-			if(existRound != null && existRound.getStatus() == 1) {
+			RoundEnd roundEnd = roundEndService.getRoundEndByRound(msg.userId, req.getRound());
+			if(roundEnd != null && roundEnd.getStatus() == 1) {
 				return retFail("当前轮已被锁定，无法更改");
 			}
 		} 
@@ -115,21 +133,61 @@ public class UserActionCtroller extends ActionCtroller{
 		}
 		
 		RoundSet nextRoundSet = roundSetService.getRoundSetByRound(req.getRound()+1);
-		Round round = null;
+		RoundEnd roundEnd = null;
 		if(req.getId() != null && req.getId() > 0) {
 			//解锁后的提交
-			round = roundService.get(req.getId());
-			if(round == null) {
+			roundEnd = roundEndService.get(req.getId());
+			if(roundEnd == null) {
 				return retFail("根据id找不到本轮数据");
 			}
 		} else {
-			round = new Round();
+			roundEnd = new RoundEnd();
 		}
 		
-		String rs = roundService.saveRound(msg, req, round, oldRound, roundSet, nextRoundSet);
+		RoundStart nextRoundStart = roundStartService.getRoundStartByRound(msg.userId, req.getRound() + 1);
+		if(nextRoundStart == null) {
+			nextRoundStart = new RoundStart();
+			nextRoundStart.setUserId(msg.userId);
+			nextRoundStart.setRound(req.getRound()+1);
+			nextRoundStart.setGrade(RoundPlay.currentGrade);
+		}
 		
-		return rs==null?retSuccess(round):retFail(rs);
+		String rs = saveRound(msg, req, roundStart, roundEnd, nextRoundStart, roundSet, nextRoundSet);
+		
+		return rs==null?retSuccess(roundEnd):retFail(rs);
 	}
+	
+	public String saveRound(BaseMsg msg, RoundForm req, RoundStart roundStart,RoundEnd roundEnd, RoundStart nextRoundStart,
+			 RoundSet roundSet, RoundSet nextRoundSet) {
+
+		//计算模型
+		String errMsg = new RoundModel(roundStart, roundEnd, nextRoundStart,roundSet, nextRoundSet, req, msg, loanService).process();
+		if(errMsg != null) {
+			return errMsg;
+		}
+		if(roundEnd.getCash() <0) {
+			return "你的现金余额不足，现金余额：" + roundEnd.getCash();
+		}
+		
+		if(req.getView() > 0) {//预览
+			return null;
+		}
+		
+		if(req.getId() != null && req.getId() > 0) {
+			boolean rs = roundEndService.update(roundEnd);
+			boolean rs1 = roundStartService.update(nextRoundStart);
+			return rs && rs1 ? null:"操作失败";
+		} else {
+			Integer id = roundEndService.save(roundEnd);
+			Integer id1 = roundStartService.save(nextRoundStart);
+			if(id != null && id>0 && id1 != null && id1 > 0) {
+				return null;
+			} else{
+				return "操作失败";
+			}
+		}
+	}  
+
 	
 	@ActionId(7)
 	public String unlock(BaseMsg msg) {
@@ -143,15 +201,16 @@ public class UserActionCtroller extends ActionCtroller{
 			return retFail("获取轮次失败");
 		}
 		
-		Round roundData = roundService.getRoundByRound(msg.userId, round);
-		if(roundData != null) {
-			roundData.setStatus(0);
-			boolean rs = roundService.update(roundData);
+		RoundEnd roundEnd = roundEndService.getRoundEndByRound(msg.userId, round);
+		if(roundEnd != null) {
+			roundEnd.setStatus(0);
+			boolean rs = roundEndService.update(roundEnd);
 			return retByRs(rs);
 		} else {
 			return retFail("找不到本轮提交数据");
 		}
 		
 	}
+	
 	
 }
